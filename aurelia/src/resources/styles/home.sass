@@ -1,14 +1,172 @@
-#home-content
+.home-content
   position        : relative
-  display         : flex
   flex-direction  : column
   flex-wrap       : nowrap
-  justify-content : center
-  align-items     : center
+  justify-content : flex-start
+  align-items     : flex-start
   align-content   : center
-  width           : 100vw
-  height          : calc(100vh - 5rem)
-  box-sizing      : border-box
   padding         : 0rem
   margin          : 0rem
-  overflow        : hidden
+
+  #options-row
+    position        : relative
+    display         : flex
+    flex-direction  : row
+    flex-wrap       : nowrap
+    justify-content : flex-end
+    align-items     : center
+    align-content   : center
+    width           : 100%
+    height          : 1.5rem
+    box-sizing      : border-box
+    margin          : 1rem 0rem
+    padding         : 0rem 1.5rem
+
+    #filter
+      position        : relative
+      display         : flex
+      flex-direction  : row
+      flex-wrap       : nowrap
+      justify-content : center
+      align-items     : center
+      align-content   : center
+      width           : auto
+      height          : 100%
+      box-sizing      : border-box
+      padding         : 0rem
+      margin          : 0rem auto 0rem 0rem
+
+      input
+        width      : 10rem
+        height     : 100%
+        box-sizing : border-box
+        font-size  : 0.85rem
+        padding    : 0rem 0.125rem
+        margin     : 0rem
+
+    #owner, #requested, #offering
+      position        : relative
+      display         : flex
+      flex-direction  : row
+      flex-wrap       : nowrap
+      justify-content : center
+      align-items     : center
+      align-content   : center
+      width           : auto
+      height          : 100%
+      box-sizing      : border-box
+      margin          : 0rem 0.25rem
+      padding         : 0rem
+
+      .colour
+        width         : 0.75rem
+        height        : 0.75rem
+        margin        : 0rem 0.125rem
+        padding       : 0rem
+        border-radius : 50%
+
+      .text
+        margin-left : 0.25rem
+        font-size   : 0.85rem
+        line-height : 0.85rem
+        color       : grey
+
+    #owner
+      .colour
+        background-color : coral
+
+    #requested
+      .colour
+        background-color : steelblue
+
+    #offering
+      .colour
+        background-color : seagreen
+
+  #books-row
+    position        : relative
+    display         : flex
+    flex-direction  : row
+    flex-wrap       : wrap
+    justify-content : flex-start
+    align-items     : flex-start
+    align-content   : flex-start
+    width           : 100%
+    height          : calc(100% - 3.5rem)
+    box-sizing      : border-box
+    padding         : 0rem 0.5rem
+    margin          : 0rem
+    overflow-x      : hidden
+    overflow-y      : auto
+
+    .book:hover
+      .book-cover
+        background-color : lightgrey
+        border           : 1px solid lightgrey
+        box-shadow       : 0rem 5px 10px -5px rgba(0, 0, 0, 1)
+
+    .book
+      position        : relative
+      display         : flex
+      flex-direction  : column
+      flex-wrap       : nowrap
+      justify-content : flex-start
+      align-items     : center
+      align-content   : center
+      width           : 10rem
+      height          : auto
+      box-sizing      : border-box
+      padding         : 0rem
+      margin          : 1rem 0.5rem
+      cursor          : pointer
+
+      .book-status
+        display         : flex
+        flex-direction  : row
+        flex-wrap       : nowrap
+        justify-content : flex-end
+        align-items     : center
+        align-content   : center
+        width           : 100%
+        height          : 1rem
+        box-sizing      : border-box
+        padding         : 0rem 2px
+        margin          : 0rem
+
+        .book-owner, .book-requested, .book-offered
+          display       : inline-block
+          width         : 0.7rem
+          height        : 0.7rem
+          padding       : 0rem
+          margin        : 0rem 0.25rem
+          box-sizing    : border-box
+          border-radius : 50%
+
+        .book-owner
+          background-color : coral
+
+        .book-requested
+          background-color : steelblue
+
+        .book-offered
+          background-color : seagreen
+
+      .book-cover
+        display          : flex
+        flex-direction   : column
+        flex-wrap        : nowrap
+        justify-content  : center
+        align-items      : center
+        align-content    : center
+        width            : 100%
+        height           : calc(100% - 1rem)
+        box-sizing       : border-box
+        padding          : 2px
+        margin           : 0rem
+        background-color : whitesmoke
+        border           : 1px solid whitesmoke
+        box-shadow       : 0rem 5px 10px -5px rgba(0, 0, 0, 0.5)
+
+        img
+          width  : 100%
+          height : auto

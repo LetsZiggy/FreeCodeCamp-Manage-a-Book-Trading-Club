@@ -1,2 +1,28 @@
 template
-  #home-content
+  #content.home-content
+    #options-row
+      #filter
+        input#filter-input(type="text" placeholder="Filter Books" value.bind="filter" disabled)
+
+      #owner
+        .colour
+        .text You own this book
+
+      #requested
+        .colour
+        .text Book is being requested
+
+      #offering
+        .colour
+        .text Book is being offered
+
+    #books-row
+      .book(repeat.for="book of books" click.delegate="showBook(book)")
+        .book-status
+          span.book-owner(if.bind="book.owner")
+          span.book-requested(if.bind="book.requested.length")
+          span.book-offered(if.bind="book.offered.length")
+        .book-cover
+          img(src="${book.image}")
+
+    book#book(book.bind="book")

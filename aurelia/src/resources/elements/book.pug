@@ -1,0 +1,25 @@
+template
+  #book-background(click.delegate="closeBook()")
+  #book-close-button(click.delegate="closeBook()")
+    img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_close_black_24px.svg")
+
+  #book-detail
+    #book-detail-owner(if.bind="book.owner")
+    #book-detail-image
+      img(src.bind="book.image")
+
+    #book-detail-info
+      a#book-detail-title(href="${book.link}" target="_blank")
+        | ${book.title}
+        img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_launch_black_24px.svg")
+      #book-detail-authors Author${book.authors.length === 1 ? '' : 's'}: ${book.authors | authors}
+      #book-detail-requested(if.bind="book.requested.length") Requester${book.requested.length === 1 ? '' : 's'}:
+        ul
+          li(repeat.for="requestee of book.requested") ${requester}
+
+      #book-detail-offered(if.bind="book.offered.length") Offerer${book.offered.length === 1 ? '' : 's'}:
+        ul
+          li(repeat.for="offerer of book.offered") ${offerer}
+
+      #book-detail-options
+        button(click.delegate="bookAction()") ${!state.user.username ? 'Login to trade' : book.owner ? 'Offer to trade' : 'Request for trade'}

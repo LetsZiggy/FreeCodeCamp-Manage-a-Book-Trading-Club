@@ -1,30 +1,22 @@
 template
-  #content.home-content
+  #content.user-content
     #options-row
       #filter
         input#filter-input(type="text" placeholder="Filter Books" value.bind="filter" disabled)
 
-      #owner
-        .colour
-        .text You own this book
-
-      //- #requested
-      //-   .colour
-      //-   .text Book is being requested
-
-      //- #offering
-      //-   .colour
-      //-   .text Book is being offered
+      #add-book(click.delegate="addBook()") Add Book
 
     #books-row-empty(if.bind="!books.length")
       | No books
       br
-      | available
+      | in your
+      br
+      | bookshelf
 
     #books-row(if.bind="books.length")
       .book(repeat.for="book of books" click.delegate="showBook(book)")
         .book-status
-          span.book-owner(if.bind="book.owner === state.user.username")
+          span.book-owner(if.bind="book.owner")
           //- span.book-requested(if.bind="book.requested.length")
           //- span.book-offered(if.bind="book.offered.length")
 

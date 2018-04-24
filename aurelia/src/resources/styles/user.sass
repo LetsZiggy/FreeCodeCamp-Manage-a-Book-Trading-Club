@@ -1,4 +1,4 @@
-.home-content
+.user-content
   position        : relative
   flex-direction  : column
   flex-wrap       : nowrap
@@ -44,72 +44,18 @@
         padding    : 0rem 0.125rem
         margin     : 0rem
 
-    #owner
-      position        : relative
-      display         : flex
-      flex-direction  : row
-      flex-wrap       : nowrap
-      justify-content : center
-      align-items     : center
-      align-content   : center
-      width           : auto
-      height          : 100%
-      box-sizing      : border-box
-      margin          : 0rem 0.25rem
-      padding         : 0rem
+    #add-book:hover
+      border           : 1px solid grey
+      background-color : lightgrey
 
-      .colour
-        width            : 0.75rem
-        height           : 0.75rem
-        margin           : 0rem 0.125rem
-        padding          : 0rem
-        border-radius    : 50%
-        background-color : seagreen
-
-      .text
-        margin-left : 0.25rem
-        font-size   : 0.85rem
-        line-height : 0.85rem
-        color       : grey
-
-    // #owner, #requested, #offering
-    //   position        : relative
-    //   display         : flex
-    //   flex-direction  : row
-    //   flex-wrap       : nowrap
-    //   justify-content : center
-    //   align-items     : center
-    //   align-content   : center
-    //   width           : auto
-    //   height          : 100%
-    //   box-sizing      : border-box
-    //   margin          : 0rem 0.25rem
-    //   padding         : 0rem
-
-    //   .colour
-    //     width         : 0.75rem
-    //     height        : 0.75rem
-    //     margin        : 0rem 0.125rem
-    //     padding       : 0rem
-    //     border-radius : 50%
-
-    //   .text
-    //     margin-left : 0.25rem
-    //     font-size   : 0.85rem
-    //     line-height : 0.85rem
-    //     color       : grey
-
-    // #owner
-    //   .colour
-    //     background-color : seagreen
-
-    // #requested
-    //   .colour
-    //     background-color : steelblue
-
-    // #offering
-    //   .colour
-    //     background-color : coral
+    #add-book
+      box-sizing       : border-box
+      border           : 1px solid lightgrey
+      margin           : 0rem 0.25rem
+      padding          : 0rem 0.5rem
+      box-shadow       : 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0)
+      background-color : white
+      cursor           : pointer
 
   #books-row-empty
     position        : relative

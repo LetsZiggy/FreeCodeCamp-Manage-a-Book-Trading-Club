@@ -1,18 +1,21 @@
-import {inject, bindable, bindingMode, observable} from 'aurelia-framework';
-import {Router} from 'aurelia-router';
+import {inject, bindable, bindingMode} from 'aurelia-framework';
+import {Router, Redirect} from 'aurelia-router';
 import {ApiInterface} from '../services/api-interface';
 import {state} from '../services/state';
 
 @inject(Router, ApiInterface)
-export class Home {
+export class User {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state = state;
-  @observable filter = '';
 
   constructor(Router, ApiInterface) {
     this.router = Router;
     this.api = ApiInterface;
-    this.books = null;
-    this.book = null;
+  }
+
+  canActivate() {
+    if(this.state.user.username === null) {
+        return(new Redirect('home'));
+    }
   }
 
   attached() {
@@ -32,19 +35,16 @@ export class Home {
       this.state.books = response.map((v, i, a) => v);
     }
 
-    this.books = this.state.books.map((v, i, a) => v);
+    this.books = this.state.books.reduce((acc, v, i, a) => {
+      if(v.owner ===  this.state.user.username) {
+        acc.push(v);
+      }
+
+      return(acc);
+    }, []);
 
     document.getElementById('filter-input').disabled = false;
     document.getElementById('filter-input').focus();
-  }
-
-  filterChanged(newValue, oldValue) {
-    if(newValue.length) {
-      this.books = this.state.books.filter((v, i, a) => v.title.toLowerCase().includes(newValue.toLowerCase()));
-    }
-    else {
-      this.books = this.state.books.map((v, i, a) => v);
-    }
   }
 
   showBook(book) {

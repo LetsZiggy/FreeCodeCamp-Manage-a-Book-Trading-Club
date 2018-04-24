@@ -17,7 +17,7 @@ export class Login {
 
   async canActivate(params, routeConfig, navigationInstruction) {
     if(this.state.user.username) {
-      let data = JSON.parse(localStorage.getItem('freecodecamp-build-a-voting-app')) || {};
+      let data = JSON.parse(localStorage.getItem('FreeCodeCamp - Manage a Book Trading Club')) || {};
       let logout = await this.api.logoutUser();
 
       if(this.state.user.interval) {
@@ -30,9 +30,11 @@ export class Login {
 
       data.username = this.state.user.username;
       data.userexpire = this.state.user.expire;
-      localStorage.setItem('freecodecamp-build-a-voting-app', JSON.stringify(data));
+      localStorage.setItem('FreeCodeCamp - Manage a Book Trading Club', JSON.stringify(data));
 
-      if(this.router.history.previousLocation === '/home' || this.router.history.previousLocation === '/polls') {
+      this.state.user.book = null;
+
+      if(this.router.history.previousLocation === '/home' || this.router.history.previousLocation === '/user') {
         return(false);
       }
       else {
@@ -50,11 +52,19 @@ export class Login {
   }
 
   detached() {
+    if(!this.state.user.username) {
+      this.state.user.book = null;
+    }
+
     if(this.state.login.timer) {
       clearInterval(this.state.login.interval);
     }
 
     this.checkNameValue = null;
+  }
+
+  deactivate() {
+    console.log('deactivate');
   }
 
   async checkInput(event, form) {
@@ -153,7 +163,12 @@ export class Login {
         console.log('logout');
       }, (this.state.user.expire - Date.now()));
 
-      this.router.navigateToRoute('home');
+      if(this.router.history.previousLocation === '/home') {
+        this.router.navigateToRoute('home');
+      }
+      else {
+        this.router.navigateToRoute('user');
+      }
     }
   }
 }

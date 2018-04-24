@@ -6,10 +6,11 @@ export const state = {
     interval: null
   },
   user: {
-    username: null,
+    username: 'null',
     expire: null,
     interval: null,
     book: null
   },
+  webSocket: null,
   books: []
 };

@@ -131,7 +131,7 @@ function handleBooks(data) {
       book.authors = v.volumeInfo.authors || [];
       book.image = v.volumeInfo.hasOwnProperty('imageLinks') ? v.volumeInfo.imageLinks.thumbnail : '';
       book.link = v.volumeInfo.infoLink;
-      book.owner = true;
+      book.owner = v.owner;
       book.requested = [];
       book.offered = [];
 

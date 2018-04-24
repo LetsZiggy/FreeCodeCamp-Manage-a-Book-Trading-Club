@@ -60,21 +60,9 @@
     width            : 30rem
     height           : auto
     box-sizing       : border-box
+    padding          : 0rem
+    margin           : 0rem
     background-color : white
-
-    #book-detail-owner
-      position         : absolute
-      right            : 0.5rem
-      top              : 0.5rem
-      z-index          : 25
-      display          : inline-block
-      width            : 0.7rem
-      height           : 0.7rem
-      padding          : 0rem
-      margin           : 0rem 0.25rem
-      box-sizing       : border-box
-      border-radius    : 50%
-      background-color : coral
 
     #book-detail-image
       display         : flex
@@ -101,7 +89,7 @@
       align-items     : flex-start
       align-content   : flex-start
       width           : 20rem
-      height          : auto
+      height          : 100%
       box-sizing      : border-box
       padding         : 1rem
 
@@ -127,6 +115,34 @@
         color       : grey
         margin      : 0rem 0rem 1rem 0rem
 
-      #book-detail-requested
-      #book-detail-offered
-      #book-detail-options
+      // #book-detail-requested
+      // #book-detail-offered
+
+    #book-detail-owner
+      position         : absolute
+      right            : 10rem
+      bottom           : 8px
+      transform        : translate(50%, 0rem)
+      box-sizing       : border-box
+      padding          : 0.5rem
+      margin           : 1.5rem 0rem 0rem 0rem
+      background-color : seagreen
+      color            : whitesmoke
+      user-select      : none
+
+    #book-detail-trade:hover
+      border           : 1px solid grey
+      background-color : lightgrey
+
+    #book-detail-trade
+      position         : absolute
+      right            : 10rem
+      bottom           : 8px
+      transform        : translate(50%, 0rem)
+      box-sizing       : border-box
+      border           : 1px solid lightgrey
+      padding          : 0.5rem
+      margin           : 1.5rem 0rem 0rem 0rem
+      box-shadow       : 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0)
+      background-color : whitesmoke
+      cursor           : pointer

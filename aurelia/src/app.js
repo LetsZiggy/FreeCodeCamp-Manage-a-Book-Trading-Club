@@ -66,7 +66,38 @@ export class App {
 
   //     return;
   //   };
+
+  //   if(!this.state.webSocket) {
+  //     this.setWebsocket();
+  //   }
   // }
+
+  setWebsocket() {
+    this.state.webSocket = new WebSocket(`ws://localhost:3000`);
+    // this.state.webSocket = new WebSocket(`wss://letsziggy-freecodecamp-dynamic-web-application-04.glitch.me`);
+
+    this.state.webSocket.onopen = (event) => {
+      console.log('open');
+    };
+
+    this.state.webSocket.onclose = (event) => {
+      this.state.webSocket = null;
+      console.log('close');
+    };
+
+    this.state.webSocket.onerror = (event) => {
+      this.state.webSocket = null;
+      console.log('error');
+    };
+
+    this.state.webSocket.onmessage = (event) => {
+      let message = JSON.parse(event.data);
+
+      if(message.type === 'add') {}
+
+      if(message.type === 'remove') {}
+    };
+  }
 
   configureRouter(config, router) {
     this.router = router;

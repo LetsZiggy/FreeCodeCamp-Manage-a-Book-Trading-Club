@@ -6,7 +6,7 @@ export const state = {
     interval: null
   },
   user: {
-    username: 'null',
+    username: 'letsziggy',
     expire: null,
     interval: null,
     book: null

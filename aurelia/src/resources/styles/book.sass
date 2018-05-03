@@ -49,7 +49,7 @@
       width     : 2rem
       height    : 2rem
 
-  #book-detail
+  #book-container
     position         : relative
     display          : flex
     flex-direction   : row
@@ -57,92 +57,172 @@
     justify-content  : flex-start
     align-items      : flex-start
     align-content    : flex-start
-    width            : 30rem
-    height           : auto
+    width            : auto
+    height           : 15rem
     box-sizing       : border-box
     padding          : 0rem
     margin           : 0rem
     background-color : white
 
-    #book-detail-image
+    #book-image
       display         : flex
       flex-direction  : column
       flex-wrap       : nowrap
       justify-content : center
       align-items     : center
       align-content   : center
-      width           : 10rem
-      height          : auto
+      width           : auto
+      height          : 100%
       box-sizing      : border-box
       padding         : 3px
 
       img
-        width  : 100%
-        height : auto
+        width  : auto
+        height : 100%
 
-    #book-detail-info
-      position        : relative
+    #book-details
       display         : flex
       flex-direction  : column
       flex-wrap       : nowrap
       justify-content : flex-start
       align-items     : flex-start
       align-content   : flex-start
-      width           : 20rem
+      width           : 25rem
       height          : 100%
       box-sizing      : border-box
       padding         : 1rem
 
-      #book-detail-title:hover
-        color : steelblue
+      #book-detail-info
+        display         : flex
+        flex-direction  : column
+        flex-wrap       : nowrap
+        justify-content : flex-start
+        align-items     : flex-start
+        align-content   : flex-start
+        width           : 100%
+        height          : 50%
 
-      #book-detail-title
-        font-size       : 1.75rem
-        font-weight     : bolder
-        line-height     : 1.5rem
-        text-decoration : underline
-        color           : black
-        margin          : 0.5rem 0rem 1rem 0rem
+        #book-detail-title:hover
+          color : steelblue
 
-        img
-          width  : 0.75rem
-          height : 0.75rem
-          margin : 0.25rem
+        #book-detail-title
+          font-size       : 1.5rem
+          font-weight     : bolder
+          line-height     : 1.25rem
+          text-decoration : underline
+          color           : black
+          margin          : 0.5rem 0rem 1rem 0rem
 
-      #book-detail-authors
-        font-size   : 0.85rem
-        line-height : 0.85rem
-        color       : grey
-        margin      : 0rem 0rem 1rem 0rem
+          img
+            width  : 0.75rem
+            height : 0.75rem
+            margin : 0.25rem
 
-      // #book-detail-requested
-      // #book-detail-offered
+        #book-detail-authors
+          font-size   : 0.85rem
+          line-height : 0.85rem
+          color       : grey
+          margin      : 0rem 0rem 1rem 0rem
 
-    #book-detail-owner
-      position         : absolute
-      right            : 10rem
-      bottom           : 8px
-      transform        : translate(50%, 0rem)
-      box-sizing       : border-box
-      padding          : 0.5rem
-      margin           : 1.5rem 0rem 0rem 0rem
-      background-color : seagreen
-      color            : whitesmoke
-      user-select      : none
+      #book-detail-options
+        display         : flex
+        flex-direction  : column
+        flex-wrap       : nowrap
+        justify-content : flex-start
+        align-items     : flex-start
+        align-content   : flex-start
+        width           : 100%
+        height          : 50%
+        padding         : 0.5rem 0rem 0rem 0rem
+        margin          : 0rem
 
-    #book-detail-trade:hover
-      border           : 1px solid grey
-      background-color : lightgrey
+        #book-detail-notlogin[data-show="true"]
+          display : block
 
-    #book-detail-trade
-      position         : absolute
-      right            : 10rem
-      bottom           : 8px
-      transform        : translate(50%, 0rem)
-      box-sizing       : border-box
-      border           : 1px solid lightgrey
-      padding          : 0.5rem
-      margin           : 1.5rem 0rem 0rem 0rem
-      box-shadow       : 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0)
-      background-color : whitesmoke
-      cursor           : pointer
+        #book-detail-notlogin:hover
+          border           : 1px solid grey
+          background-color : lightgrey
+
+        #book-detail-notlogin
+          display          : none
+          align-self       : center
+          box-sizing       : border-box
+          border           : 1px solid lightgrey
+          padding          : 0.5rem
+          margin           : auto 0rem 0rem 0rem
+          background-color : whitesmoke
+          cursor           : pointer
+
+        #book-detail-isowner[data-show="true"]
+          display : block
+
+        #book-detail-isowner
+          display          : none
+          align-self       : center
+          box-sizing       : border-box
+          padding          : 0.5rem
+          margin           : auto 0rem 0rem 0rem
+          background-color : seagreen
+          color            : whitesmoke
+          user-select      : none
+
+        #book-detail-tradable-list[data-show="true"]
+          display : flex
+
+        #book-detail-tradable-list
+          display         : none
+          flex-direction  : row
+          flex-wrap       : wrap
+          justify-content : flex-start
+          align-items     : flex-start
+          align-content   : flex-start
+          width           : 100%
+          height          : 100%
+          box-sizing      : border-box
+          border-top      : 1px solid lightgrey
+
+          .title
+            display         : block
+            width           : 100%
+            height          : auto
+            padding         : 0.5rem 0rem 0rem 0rem
+            margin          : 0rem 0rem 0.5rem 0rem
+            font-size       : 0.85rem
+            line-height     : 0.85rem
+            text-decoration : underline
+            color           : lightgrey
+
+          .tradable[data-status="0"]:hover
+            background-color : white
+
+          .tradable
+            display          : flex
+            flex-direction   : column
+            flex-wrap        : nowrap
+            justify-content  : flex-start
+            align-items      : flex-start
+            align-content    : flex-start
+            box-sizing       : border-box
+            border           : 1px solid lightgrey
+            padding          : 0.25rem
+            margin           : 0rem 0.25rem 0.25rem 0.25rem
+            cursor           : pointer
+
+            .username
+              font-size   : 0.65rem
+              line-height : 0.65rem
+              color       : black
+
+            .location
+              font-size   : 0.65rem
+              line-height : 0.65rem
+              color       : grey
+
+            .status
+              font-size   : 0.65rem
+              line-height : 0.65rem
+              color       : grey
+
+// span.username ${owner.username}
+// span.location(if.bind="$parent.dataset.status === '0'") ${owner.location ? owner.location : 'No location available'}
+// span.status(if.bind="$parent.dataset.status !== '0'") ${owner.status}

@@ -24,7 +24,7 @@ export class App {
     }
   }
 
-  // async attached() {
+  async attached() {
   //   if(this.state.user.username && this.state.user.expire && (this.state.user.expire - Date.now()) > 5000) {
   //     this.state.user.interval = setTimeout(async () => {
   //       let logout = await this.api.logoutUser();
@@ -70,7 +70,7 @@ export class App {
   //   if(!this.state.webSocket) {
   //     this.setWebsocket();
   //   }
-  // }
+  }
 
   setWebsocket() {
     this.state.webSocket = new WebSocket(`ws://localhost:3000`);

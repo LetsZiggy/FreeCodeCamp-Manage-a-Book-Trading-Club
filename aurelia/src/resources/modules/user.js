@@ -10,6 +10,7 @@ export class User {
   constructor(Router, ApiInterface) {
     this.router = Router;
     this.api = ApiInterface;
+    this.userLocation = '';
   }
 
   canActivate() {
@@ -20,10 +21,6 @@ export class User {
 
   attached() {
     this.initialise();
-
-    if(this.state.user.book) {
-      this.showBook(this.state.user.book);
-    }
   }
 
   detached() {
@@ -36,21 +33,25 @@ export class User {
     }
 
     this.books = this.state.books.reduce((acc, v, i, a) => {
-      if(v.owner ===  this.state.user.username) {
+      if(v.owners.includes(this.state.user.username)) {
         acc.push(v);
       }
 
       return(acc);
     }, []);
-
-    document.getElementById('filter-input').disabled = false;
-    document.getElementById('filter-input').focus();
   }
 
-  showBook(book) {
-    this.book = book;
-    
-    document.getElementById('book').style.visibility = 'visible';
-    document.getElementById('book').style.pointerEvents = 'auto';
+  addBook() {
+
+  }
+
+  removeBook(id) {
+    // remove this.state.user.username from this.state.books[id].owner
+    // remove this.state.user.username from this.books[id].owner
+    // if no more owner, remove book data
+  }
+
+  openMessage(request) {
+
   }
 }

@@ -1,26 +1,34 @@
 template
   #content.user-content
     #options-row
-      #filter
-        input#filter-input(type="text" placeholder="Filter Books" value.bind="filter" disabled)
-
+      #location
+        button#location-show(click.delegate="setLocation('show')") Set Location
+        input#location-input(type="text" placeholder="Set your location" value="userLocation")
+        button#location-save(click.delegate="setLocation('location-input')") Save
       #add-book(click.delegate="addBook()") Add Book
-
     #books-row-empty(if.bind="!books.length")
       | No books
       br
       | in your
       br
       | bookshelf
-
     #books-row(if.bind="books.length")
-      .book(repeat.for="book of books" click.delegate="showBook(book)")
-        .book-status
-          span.book-owner(if.bind="book.owner")
-          //- span.book-requested(if.bind="book.requested.length")
-          //- span.book-offered(if.bind="book.offered.length")
+      .book(repeat.for="book of books")
+        input.book-checkbox(type="checkbox" id="checkbox-${book.id}" ref="book.checkbox")
+        .book-main
+          img.book-cover(src="${book.image}")
+          .book-info
+            .book-title ${book.title}
+            .book-options
+              label.book-no-requests(if.bind="!book.requests.length") No Requests
+              label.book-requests(if.bind="book.requests.length" id="label-open-${book.id}" for="checkbox-${book.id}") ${book.checkbox.checked ? 'Close Requests' : 'Show Requests'}
+              label.book-remove(click.delegate="removeBook(book.id)") Remove Book
+        .book-list
+          .book-list-title
+            | Members requesting for trade&nbsp;
+            span (click to send message)
+            | &nbsp;:
+          .request(repeat.for="request of book.requests" click.delegate="openMessage(request)") ${request}
 
-        .book-cover
-          img(src="${book.image}")
-
-    book#book(book.bind="book")
+    new-book#add-book
+    message#message(message.bind="message")

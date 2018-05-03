@@ -5,8 +5,7 @@ import {HttpClient} from 'aurelia-fetch-client';
 export class ApiInterface {
   constructor(HttpClient) {
     HttpClient.configure(config => {
-      config.withBaseUrl('http://localhost:4000')
-      // config.withBaseUrl('http://localhost:3000/api')
+      config.withBaseUrl('http://localhost:3000/api')
       // config.withBaseUrl('https://letsziggy-freecodecamp-dynamic-web-application-04.glitch.me/api')
             .withInterceptor({
               request(request) {
@@ -32,13 +31,13 @@ export class ApiInterface {
     return(
       this.http.fetch(`/books`, {
                  method: 'GET',
-                 // credentials: 'same-origin',
+                 credentials: 'same-origin',
                  headers: {
                   'Accept': 'application/json'
                  }
                })
                .then(response => response.json())
-               .then(data => handleBooks(data))
+               .then(data => data)
     );
   }
 
@@ -121,20 +120,32 @@ export class ApiInterface {
   }
 }
 
-function handleBooks(data) {
+function getBookshelf(data) {
   let books = data.reduce((acc, v, i, a) => {
-    if(v.volumeInfo.hasOwnProperty('imageLinks')) {
-      let book = {};
+    let book = {};
 
-      book.id = v.id || '';
-      book.title = v.volumeInfo.title || '';
-      book.authors = v.volumeInfo.authors || [];
-      book.image = v.volumeInfo.hasOwnProperty('imageLinks') ? v.volumeInfo.imageLinks.thumbnail : '';
-      book.link = v.volumeInfo.infoLink;
-      book.owner = v.owner;
-      book.requested = [];
-      book.offered = [];
+    book.id = v.id;
+    book.title = v.title;
+    book.authors = v.authors;
+    book.image = v.image;
+    book.link = v.link;
+    book.owners = v.owners;
 
+    acc.push(book);
+
+    return(acc);
+  }, []);
+
+  return(books);
+}
+
+function processSearch(data) {
+  let books = [];
+
+  books = data.items.reduce((acc, v, i, a) => {
+    let book = processBook(v);
+
+    if(book !== null) {
       acc.push(book);
     }
 
@@ -142,4 +153,29 @@ function handleBooks(data) {
   }, []);
 
   return(books);
+}
+
+function processBook(data) {
+  if(v.volumeInfo.hasOwnProperty('imageLinks')) {
+    let book = {};
+
+    book.id = v.id || '';
+    book.title = v.volumeInfo.title || '';
+    book.authors = v.volumeInfo.authors || [];
+    book.image = v.volumeInfo.hasOwnProperty('imageLinks') ? v.volumeInfo.imageLinks.thumbnail : '';
+    book.link = v.volumeInfo.infoLink;
+    book.owners = {};
+    /*
+    {
+      ownerUsername: {
+        requesterUsername: stage
+      }
+    }
+    */
+
+    return(book);
+  }
+  else {
+    return(null)
+  }
 }

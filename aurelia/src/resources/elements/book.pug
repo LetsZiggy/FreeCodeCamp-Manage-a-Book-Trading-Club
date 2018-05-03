@@ -3,21 +3,24 @@ template
   #book-close-button(click.delegate="closeBook()")
     img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_close_black_24px.svg")
 
-  #book-detail
-    #book-detail-image
-      img(src.bind="book.image")
+  #book-container
+    #book-image
+      img(src.bind="bookSelected.image")
 
-    #book-detail-info
-      a#book-detail-title(href="${book.link}" target="_blank")
-        | ${book.title}
-        img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_launch_black_24px.svg")
-      #book-detail-authors Author${book.authors.length === 1 ? '' : 's'}: ${book.authors | authors}
-      //- #book-detail-requested(if.bind="book.requested.length") Requester${book.requested.length === 1 ? '' : 's'}:
-      //-   ul
-      //-     li(repeat.for="requestee of book.requested") ${requester}
-      //- #book-detail-offered(if.bind="book.offered.length") Offerer${book.offered.length === 1 ? '' : 's'}:
-      //-   ul
-      //-     li(repeat.for="offerer of book.offered") ${offerer}
-
-    #book-detail-owner(if.bind="book.owner === state.user.username") You have this book
-    #book-detail-trade(if.bind="book.owner !== state.user.username" click.delegate="bookAction()") ${!state.user.username ? 'Login to trade' : 'Request trade'}
+    #book-details
+      #book-detail-info
+        a#book-detail-title(href="${bookSelected.link}" target="_blank")
+          | ${bookSelected.title}
+          img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_launch_black_24px.svg")
+        #book-detail-authors Author${bookSelected.authors.length === 1 ? '' : 's'}: ${bookSelected.authors | authors}
+      #book-detail-options
+        #book-detail-notlogin(data-show="false" click.delegate="bookToLogin()") Login to trade
+        #book-detail-isowner(data-show="false") You have this book
+        #book-detail-tradable-list(data-show="false")
+          .title Request trade with:
+          .tradable(repeat.for="owner of bookSelected.owners" data-status.bind="setTradeStatus(owner)" click.delegate="requestTrade(owner)")
+            span.username ${owner.username}
+            span.location(if.bind="setTradeDisplay()") test
+            span.status(if.bind="setTradeDisplay()") 00
+            //- ${owner.location.length ? owner.location : 'No location available'}
+            //- ${owner.status}

@@ -14,13 +14,13 @@ template
           img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_launch_black_24px.svg")
         #book-detail-authors Author${bookSelected.authors.length === 1 ? '' : 's'}: ${bookSelected.authors | authors}
       #book-detail-options
-        #book-detail-notlogin(data-show="false" click.delegate="bookToLogin()") Login to trade
-        #book-detail-isowner(data-show="false") You have this book
-        #book-detail-tradable-list(data-show="false")
+        #book-detail-notlogin(if.bind="bookSelected.showList.detailNotLogin" click.delegate="bookToLogin()") Login to trade
+        #book-detail-isowner(if.bind="bookSelected.showList.detailIsOwner") You have this book
+        #book-detail-tradable-list(if.bind="bookSelected.showList.detailTradableList")
           .title Request trade with:
-          .tradable(repeat.for="owner of bookSelected.owners" data-status.bind="setTradeStatus(owner)" click.delegate="requestTrade(owner)")
+          .tradable(repeat.for="owner of bookSelected.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="requestTrade(owner)")
             span.username ${owner.username}
-            span.location(if.bind="setTradeDisplay()") test
-            span.status(if.bind="setTradeDisplay()") 00
+            span.location(if.bind="setTradeDisplay(owner, 'location')") location
+            span.status(if.bind="setTradeDisplay(owner, 'status')") status
             //- ${owner.location.length ? owner.location : 'No location available'}
             //- ${owner.status}

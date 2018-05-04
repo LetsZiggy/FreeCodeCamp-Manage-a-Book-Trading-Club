@@ -74,19 +74,22 @@ export class ApiInterface {
   }
 
   getUser(user) {
-    return(
-      this.http.fetch(`/user/login`, {
-                 method: 'POST',
-                 credentials: 'same-origin',
-                 headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify(user)
-               })
-               .then(response => response.json())
-               .then(data => data)
-    );
+    let date = new Date();
+    date.setDate(date.getDate() + 1);
+    return({ get: true, expire: date, username: 'testUser' });
+    // return(
+    //   this.http.fetch(`/user/login`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //                'Accept': 'application/json',
+    //                'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify(user)
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
   }
 
   logoutUser() {

@@ -13,7 +13,7 @@ template
     #books-row(if.bind="books.length")
       .book(repeat.for="book of books" click.delegate="showBook(book)")
         .book-status
-          span.book-owner(if.bind="isOwner(book)")
+          span.book-owner(if.bind="book.ownerList.includes(state.user.username)")
         .book-cover
           img(src="${book.image}")
     book#book(book-selected.bind="bookSelected" state.bind="state")

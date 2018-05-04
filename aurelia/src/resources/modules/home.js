@@ -11,13 +11,12 @@ export class Home {
   constructor(Router, ApiInterface) {
     this.router = Router;
     this.api = ApiInterface;
-    this.books = null;
+    this.books = [];
     this.bookSelected = null;
   }
 
   attached() {
     if(!this.state.books.length) {
-      this.state.user.username = 'testUser';
       this.state.books.push({
         id: 'test-id-1',
         title: 'test-book-1',
@@ -86,13 +85,12 @@ export class Home {
     }
 
     this.books = this.state.books.map((v, i, a) => v);
+    this.books.forEach((v, i, a) => {
+      v.ownerList = v.owners.map((mv, mi, ma) => mv.username);
+    });
 
     document.getElementById('filter-input').disabled = false;
     document.getElementById('filter-input').focus();
-  }
-
-  isOwner(book) {
-    return(book.owners.map((v, i, a) => v.username).includes(this.state.user.username));
   }
 
   filterChanged(newValue, oldValue) {
@@ -109,30 +107,53 @@ export class Home {
 
     let isOwner = this.bookSelected.owners.map((v, i, a) => v.username).includes(this.state.user.username);
 
-    let detailNotLogin = document.getElementById('book-detail-notlogin');
-    let detailIsOwner = document.getElementById('book-detail-isowner');
-    let detailTradableList = document.getElementById('book-detail-tradable-list');
+    this.bookSelected.showList = {};
 
     if(!this.state.user.username) {
-      detailNotLogin.dataset.show = true;
-      detailIsOwner.dataset.show = false;
-      detailTradableList.dataset.show = false;
+      this.bookSelected.showList.detailNotLogin = true;
+      this.bookSelected.showList.detailIsOwner = false;
+      this.bookSelected.showList.detailTradableList = false;
     }
     else if(isOwner) {
-      detailNotLogin.dataset.show = false;
-      detailIsOwner.dataset.show = true;
-      detailTradableList.dataset.show = false;
+      this.bookSelected.showList.detailNotLogin = false;
+      this.bookSelected.showList.detailIsOwner = true;
+      this.bookSelected.showList.detailTradableList = false;
     }
     else if(!isOwner) {
-      detailNotLogin.dataset.show = false;
-      detailIsOwner.dataset.show = false;
-      detailTradableList.dataset.show = true;
+      this.bookSelected.showList.detailNotLogin = false;
+      this.bookSelected.showList.detailIsOwner = false;
+      this.bookSelected.showList.detailTradableList = true;
     }
     else {
-      detailNotLogin.dataset.show = false;
-      detailIsOwner.dataset.show = false;
-      detailTradableList.dataset.show = false;
+      this.bookSelected.showList.detailNotLogin = false;
+      this.bookSelected.showList.detailIsOwner = false;
+      this.bookSelected.showList.detailTradableList = false;
     }
+
+    // let detailNotLogin = document.getElementById('book-detail-notlogin');
+    // let detailIsOwner = document.getElementById('book-detail-isowner');
+    // let detailTradableList = document.getElementById('book-detail-tradable-list');
+
+    // if(!this.state.user.username) {
+    //   detailNotLogin.dataset.show = true;
+    //   detailIsOwner.dataset.show = false;
+    //   detailTradableList.dataset.show = false;
+    // }
+    // else if(isOwner) {
+    //   detailNotLogin.dataset.show = false;
+    //   detailIsOwner.dataset.show = true;
+    //   detailTradableList.dataset.show = false;
+    // }
+    // else if(!isOwner) {
+    //   detailNotLogin.dataset.show = false;
+    //   detailIsOwner.dataset.show = false;
+    //   detailTradableList.dataset.show = true;
+    // }
+    // else {
+    //   detailNotLogin.dataset.show = false;
+    //   detailIsOwner.dataset.show = false;
+    //   detailTradableList.dataset.show = false;
+    // }
     
     document.getElementById('book').style.visibility = 'visible';
     document.getElementById('book').style.pointerEvents = 'auto';

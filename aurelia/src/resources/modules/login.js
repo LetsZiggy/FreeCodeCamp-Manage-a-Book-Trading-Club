@@ -33,10 +33,12 @@ export class Login {
       localStorage.setItem('FreeCodeCamp - Manage a Book Trading Club', JSON.stringify(data));
 
       this.state.user.book = null;
-      document.getElementById('book').style.visibility = 'hidden';
-      document.getElementById('book').style.pointerEvents = 'none';
+      if(this.router.history.previousLocation === '/home') {
+        document.getElementById('book').style.visibility = 'hidden';
+        document.getElementById('book').style.pointerEvents = 'none';
+      }
 
-      return(new Redirect('home'));
+      return(new Redirect('home')); 
     }
   }
 
@@ -144,8 +146,9 @@ export class Login {
       }
     }
     else {
+      this.state.user.username = result.username;
       this.state.user.expire = result.expire;
-      this.state.user.username = document.getElementById(`${form}-username`).value;
+      // this.state.user.username = document.getElementById(`${form}-username`).value;
 
       this.state.user.interval = setTimeout(async () => {
         let logout = await this.api.logoutUser();

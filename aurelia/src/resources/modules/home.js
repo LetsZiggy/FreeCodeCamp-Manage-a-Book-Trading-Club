@@ -26,9 +26,9 @@ export class Home {
         owners: [
           {
             username: 'requestUser',
-            location: 'location',
+            location: 'test-location test-location',
             requests: {
-              // 'requestUser': 0
+              'testUser': '1'
             }
           }
         ]
@@ -44,7 +44,7 @@ export class Home {
             username: 'requestUser',
             location: '',
             requests: {
-              'testUser': '1'
+              'testUser': '2'
             }
           }
         ]
@@ -53,6 +53,22 @@ export class Home {
         id: 'test-id-3',
         title: 'test-book-3',
         authors: ['test-author-3'],
+        image: 'http://via.placeholder.com/375x300',
+        link: 'https://www.example.com/',
+        owners: [
+          {
+            username: 'requestUser',
+            location: '',
+            requests: {
+              'testUser': '0'
+            }
+          }
+        ]
+      });
+      this.state.books.push({
+        id: 'test-id-4',
+        title: 'test-book-4',
+        authors: ['test-author-4'],
         image: 'http://via.placeholder.com/300x450',
         link: 'https://www.example.com/',
         owners: [
@@ -71,8 +87,6 @@ export class Home {
     if(this.state.user.book) {
       this.showBook(this.state.user.book);
     }
-
-    console.log();
   }
 
   detached() {
@@ -80,14 +94,16 @@ export class Home {
 
   async initialise() {
     if(!this.state.books.length) {
-      let response = await this.api.getBooks();
-      this.state.books = response.map((v, i, a) => v);
+      let response = await this.api.getBookshelf();
+      this.state.books = response.bookshelf.map((v, i, a) => v);
     }
 
-    this.books = this.state.books.map((v, i, a) => v);
-    this.books.forEach((v, i, a) => {
-      v.ownerList = v.owners.map((mv, mi, ma) => mv.username);
-    });
+    if(this.state.books.length) {
+      this.books = this.state.books.map((v, i, a) => v);
+      this.books.forEach((v, i, a) => {
+        v.ownerList = v.owners.map((mv, mi, ma) => mv.username);
+      });
+    }
 
     document.getElementById('filter-input').disabled = false;
     document.getElementById('filter-input').focus();
@@ -130,32 +146,8 @@ export class Home {
       this.bookSelected.showList.detailTradableList = false;
     }
 
-    // let detailNotLogin = document.getElementById('book-detail-notlogin');
-    // let detailIsOwner = document.getElementById('book-detail-isowner');
-    // let detailTradableList = document.getElementById('book-detail-tradable-list');
-
-    // if(!this.state.user.username) {
-    //   detailNotLogin.dataset.show = true;
-    //   detailIsOwner.dataset.show = false;
-    //   detailTradableList.dataset.show = false;
-    // }
-    // else if(isOwner) {
-    //   detailNotLogin.dataset.show = false;
-    //   detailIsOwner.dataset.show = true;
-    //   detailTradableList.dataset.show = false;
-    // }
-    // else if(!isOwner) {
-    //   detailNotLogin.dataset.show = false;
-    //   detailIsOwner.dataset.show = false;
-    //   detailTradableList.dataset.show = true;
-    // }
-    // else {
-    //   detailNotLogin.dataset.show = false;
-    //   detailIsOwner.dataset.show = false;
-    //   detailTradableList.dataset.show = false;
-    // }
-    
     document.getElementById('book').style.visibility = 'visible';
     document.getElementById('book').style.pointerEvents = 'auto';
+    document.getElementById('book-request-error').style.display = 'none';
   }
 }

@@ -184,9 +184,38 @@
             color           : lightgrey
 
           .tradable[data-status="0"]:hover
-            background-color : white
+            background-color : gainsboro
+
+          .tradable[data-status="0"]
+            border : 1px solid gainsboro
+
+            .location
+              display : inline-block
+
+            .status
+              display : none
+
+          .tradable[data-status="1"]:hover, .tradable[data-status="2"]:hover
+            .cancel
+              display : flex
+
+          .tradable[data-status="1"], .tradable[data-status="2"]
+            border : 0px solid rgba(0, 0, 0, 0)
+
+            .location
+              display : none
+
+            .status
+              display : inline-block
+
+          .tradable[data-status="1"]
+            background-color : yellow
+
+          .tradable[data-status="2"]
+            background-color : lime
 
           .tradable
+            position         : relative
             display          : flex
             flex-direction   : column
             flex-wrap        : nowrap
@@ -194,26 +223,60 @@
             align-items      : flex-start
             align-content    : flex-start
             box-sizing       : border-box
-            border           : 1px solid lightgrey
             padding          : 0.25rem
             margin           : 0rem 0.25rem 0.25rem 0.25rem
+            background-color : white
             cursor           : pointer
 
+            span
+              pointer-events : none
+              user-select    : none
+
             .username
-              font-size   : 0.65rem
-              line-height : 0.65rem
+              font-size   : 0.85rem
+              line-height : 0.85rem
               color       : black
 
-            .location
+            .location, .status
               font-size   : 0.65rem
-              line-height : 0.65rem
+              line-height : 0.75rem
               color       : grey
 
-            .status
-              font-size   : 0.65rem
-              line-height : 0.65rem
-              color       : grey
+            .cancel
+              position         : absolute
+              left             : 0rem
+              top              : 0rem
+              display          : none
+              flex-direction   : column
+              flex-wrap        : nowrap
+              justify-content  : center
+              align-items      : center
+              align-content    : center
+              width            : 100%
+              height           : 100%
+              font-size        : 0.75rem
+              font-weight      : bolder
+              line-height      : 0.75rem
+              color            : white
+              background-color : crimson
+              box-sizing       : border-box
+              overflow         : hidden
 
-// span.username ${owner.username}
-// span.location(if.bind="$parent.dataset.status === '0'") ${owner.location ? owner.location : 'No location available'}
-// span.status(if.bind="$parent.dataset.status !== '0'") ${owner.status}
+  #book-request-error
+    position         : absolute
+    left             : 50%
+    top              : 3.5rem
+    transform        : translateX(-50%)
+    z-index          : 3
+    display          : none
+    min-width        : 25rem
+    max-width        : 30rem
+    height           : auto
+    box-sizing       : border-box
+    padding          : 0.5rem 1rem
+    margin           : 1rem 0rem 0rem 0rem
+    background-color : white
+    color            : crimson
+    text-align       : center
+    pointer-events   : none
+    user-select      : none

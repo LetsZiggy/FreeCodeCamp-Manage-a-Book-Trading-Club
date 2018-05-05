@@ -27,9 +27,9 @@ export class ApiInterface {
     this.http = HttpClient;
   }
 
-  getBooks() {
+  getBookshelf() {
     return(
-      this.http.fetch(`/books`, {
+      this.http.fetch(`/bookshelf`, {
                  method: 'GET',
                  credentials: 'same-origin',
                  headers: {
@@ -39,6 +39,40 @@ export class ApiInterface {
                .then(response => response.json())
                .then(data => data)
     );
+  }
+
+  submitRequest(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/submit`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
+  }
+
+  cancelRequest(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/cancel`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
   }
 
   getUserNames(username) {

@@ -18,9 +18,13 @@ template
         #book-detail-isowner(if.bind="bookSelected.showList.detailIsOwner") You have this book
         #book-detail-tradable-list(if.bind="bookSelected.showList.detailTradableList")
           .title Request trade with:
-          .tradable(repeat.for="owner of bookSelected.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="requestTrade(owner)")
+          .tradable(repeat.for="owner of bookSelected.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="tradeEvent(owner)")
             span.username ${owner.username}
-            span.location(if.bind="setTradeDisplay(owner, 'location')") location
-            span.status(if.bind="setTradeDisplay(owner, 'status')") status
-            //- ${owner.location.length ? owner.location : 'No location available'}
-            //- ${owner.status}
+            span.location ${owner.location}
+            span.status ${owner.requests[state.user.username] === '1' ? 'Request sent' : 'Request accepted'}
+            span.cancel Cancel Request
+
+  #book-request-error
+    | Sorry. There is an error processing your request.
+    br
+    | Please try again later.

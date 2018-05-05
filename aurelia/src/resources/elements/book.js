@@ -1,17 +1,10 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
-import {Router} from 'aurelia-router';
 
-@inject(Router)
 export class Book {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) bookSelected;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state;
-
-  constructor(Router) {
-    this.router = Router;
-  }
-
-  attached() {
-  }
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) api;
+  @bindable({ defaultBindingMode: bindingMode.oneWay }) router;
 
   bookSelectedChanged(newValue, oldValue) {
     if(newValue) {
@@ -22,34 +15,12 @@ export class Book {
           if(!v.requests.hasOwnProperty(this.state.user.username)) {
             v.requests[this.state.user.username] = '0';
           }
+          if(!v.location.length) {
+            v.location = 'No location given'
+          }
         });
       }
     }
-
-    // let detailNotLogin = document.getElementById('book-detail-notlogin');
-    // let detailIsOwner = document.getElementById('book-detail-isowner');
-    // let detailTradableList = document.getElementById('book-detail-tradable-list');
-
-    // if(!this.state.user.username) {
-    //   detailNotLogin.dataset.show = true;
-    //   detailIsOwner.dataset.show = false;
-    //   detailTradableList.dataset.show = false;
-    // }
-    // else if(isOwner) {
-    //   detailNotLogin.dataset.show = false;
-    //   detailIsOwner.dataset.show = true;
-    //   detailTradableList.dataset.show = false;
-    // }
-    // else if(!isOwner) {
-    //   detailNotLogin.dataset.show = false;
-    //   detailIsOwner.dataset.show = false;
-    //   detailTradableList.dataset.show = true;
-    // }
-    // else {
-    //   detailNotLogin.dataset.show = false;
-    //   detailIsOwner.dataset.show = false;
-    //   detailTradableList.dataset.show = false;
-    // }
   }
 
   closeBook() {
@@ -73,21 +44,28 @@ export class Book {
     }
   }
 
-  setTradeDisplay(owner, span) {
-    let show = null;
+  async tradeEvent(owner) {
+    let result = null;
 
     if(owner.elem.dataset.status === '0') {
-      show = 'location';
+      result = await this.api.submitRequest(this.bookSelected.id, owner.username, this.state.user.username);
+      if(result.update) {
+        owner.elem.dataset.status = '1';
+      }
+      else {
+        document.getElementById('book-request-error').style.display = 'block';
+        setTimeout(() => { document.getElementById('book-request-error').style.display = 'none'; }, 3000);
+      }
     }
     else {
-      show = 'status';
-    }
-
-    if(span === show) {
-      return(true);
-    }
-    else {
-      return(false);
+      result = await this.api.cancelRequest(this.bookSelected.id, owner.username, this.state.user.username)
+      if(result.update) {
+        owner.elem.dataset.status = '0';
+      }
+      else {
+        document.getElementById('book-request-error').style.display = 'block';
+        setTimeout(() => { document.getElementById('book-request-error').style.display = 'none'; }, 3000);
+      }
     }
   }
 }

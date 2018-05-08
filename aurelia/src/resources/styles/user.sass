@@ -22,11 +22,59 @@
     margin          : 1rem 0rem
     padding         : 0rem 1.5rem
 
+    #location
+      position        : relative
+      display         : flex
+      flex-direction  : row
+      flex-wrap       : nowrap
+      justify-content : center
+      align-items     : center
+      align-content   : center
+      width           : auto
+      height          : 100%
+      box-sizing      : border-box
+      padding         : 0rem
+      margin          : 0rem
+
+      input
+        width      : 15rem
+        height     : 100%
+        box-sizing : border-box
+        font-size  : 0.85rem
+        padding    : 0rem 0.125rem
+        margin     : 0rem
+
+      div:hover
+        border           : 1px solid grey
+        background-color : lightgrey
+
+      div
+        display          : flex
+        flex-direction   : row
+        flex-wrap        : nowrap
+        justify-content  : center
+        align-items      : center
+        align-content    : center
+        width            : auto
+        height           : 100%
+        box-sizing       : border-box
+        border           : 1px solid lightgrey
+        margin           : 0rem 0rem 0rem 0.25rem
+        padding          : 0rem 0.125rem
+        background-color : whitesmoke
+        cursor           : pointer
+
+        img
+          width : auto
+          height : 80%
+
     #add-book:hover
       border           : 1px solid grey
       background-color : lightgrey
 
     #add-book
+      width            : auto
+      height           : 100%
       box-sizing       : border-box
       border           : 1px solid lightgrey
       margin           : 0rem 0rem 0rem auto
@@ -120,13 +168,13 @@
           height          : 5rem
           box-sizing      : border-box
           padding         : 0rem
-          margin          : 0rem
+          margin          : 0rem 0.5rem 0rem 0rem
 
           .book-title
             width       : 100%
-            height      : 2.5rem
+            height      : 1.5rem
             box-sizing  : border-box
-            padding     : 0.25rem
+            padding     : 0.25rem 0rem
             margin      : 0rem
             font-size   : 1rem
             font-weight : bolder
@@ -134,15 +182,26 @@
             color       : black
             text-align  : center
 
+          .book-authors
+            width       : 100%
+            height      : 1rem
+            box-sizing  : border-box
+            padding     : 0.15rem 0rem 0rem 0rem
+            margin      : 0rem
+            font-size   : 0.85rem
+            line-height : 0.85rem
+            color       : grey
+            text-align  : center
+
           .book-options
             display         : flex
             flex-direction  : row
             flex-wrap       : nowrap
-            justify-content : flex-end
-            align-items     : flex-end
+            justify-content : space-between
+            align-items     : space-between
             align-content   : center
             width           : 100%
-            height          : 2.5rem
+            height          : 2rem
             box-sizing      : border-box
             padding         : 0.25rem 0rem
             margin          : 0rem
@@ -163,11 +222,11 @@
               line-height     : 0.85rem
               color           : grey
 
-            .book-requests:hover, .book-remove:hover
+            .book-has-requests:hover, .book-remove:hover
               border           : 1px solid grey
               background-color : lightgrey
 
-            .book-requests, .book-remove
+            .book-has-requests, .book-remove
               display          : flex
               flex-direction   : row
               flex-wrap        : nowrap
@@ -185,13 +244,14 @@
               background-color : white
               cursor           : pointer
 
-      .book-checkbox:checked ~ .book-list
-        height     : auto
-        padding    : 2rem 1rem 0.5rem 1rem
-        margin     : 0rem
-        border-top : 1px solid lightgrey
+      .book-checkbox:checked ~ .book-requests
+        height        : auto
+        padding       : 2rem 1rem 0.5rem 1rem
+        margin        : 0rem
+        border-top    : 1px solid lightgrey
+        border-bottom : 1px solid lightgrey
 
-      .book-list
+      .book-requests
         position        : relative
         display         : flex
         flex-direction  : row
@@ -203,11 +263,12 @@
         height          : 0px
         box-sizing      : border-box
         border-top      : 0px solid lightgrey
+        border-bottom   : 0px solid lightgrey
         padding         : 0rem
         margin          : 0rem
         overflow        : hidden
 
-        .book-list-title
+        .book-requests-title
           position    : absolute
           left        : 1rem
           top         : 0.5rem
@@ -221,9 +282,27 @@
             line-height : 0.85rem
             color       : grey
 
-        .request:hover
-          border           : 1px solid grey
-          background-color : lightgrey
+        .request[data-status="1"]
+          .request-details
+            background-color : greenyellow
+
+          .request-actions
+            .accept
+              display : inline-flex
+
+            .done
+              display : none
+
+        .request[data-status="2"]
+          .request-details
+            background-color : lightskyblue
+
+          .request-actions
+            .accept
+              display : none
+
+            .done
+              display : inline-flex
 
         .request
           display          : flex
@@ -233,12 +312,76 @@
           align-items      : center
           align-content    : center
           width            : auto
-          height           : 1.5rem
+          height           : 2.5rem
           box-sizing       : border-box
           border           : 1px solid lightgrey
-          padding          : 0rem 0.25rem
+          padding          : 0rem
           margin           : 0rem 0.5rem
           font-size        : 0.85rem
           line-height      : 0.85rem
           background-color : white
-          cursor           : pointer
+
+          .request-details
+            display         : flex
+            flex-direction  : column
+            flex-wrap       : nowrap
+            justify-content : center
+            align-items     : center
+            align-content   : center
+            width           : auto
+            height          : 100%
+            box-sizing      : border-box
+            padding         : 0rem 0.5rem
+            margin          : 0rem
+            user-select     : none
+
+            .username
+              display         : inline-block
+              margin          : 0rem 0rem 0.125rem 0rem
+              text-decoration : underline
+
+            .status
+              display     : inline-block
+              font-size   : 0.65rem
+              line-height : 0.75rem
+              margin      : 0.125rem 0rem 0rem 0rem
+              color       : grey
+
+          .request-actions
+            display         : flex
+            flex-direction  : row
+            flex-wrap       : nowrap
+            justify-content : center
+            align-items     : center
+            align-content   : center
+            width           : auto
+            height          : 100%
+            box-sizing      : border-box
+            padding         : 0rem
+            margin          : 0rem
+
+            .accept:hover
+              background-color : greenyellow
+
+            .done:hover
+              background-color : lightskyblue
+
+            .cancel:hover
+              background-color : crimson
+
+            .accept, .done, .cancel
+              flex-direction  : row
+              flex-wrap       : nowrap
+              justify-content : center
+              align-items     : center
+              align-content   : center
+              width           : auto
+              height          : 100%
+              box-sizing      : border-box
+              border-left     : 1px solid lightgrey
+              padding         : 0rem 0.5rem
+              margin          : 0rem
+              cursor          : pointer
+
+            .cancel
+              display         : inline-flex

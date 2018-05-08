@@ -1,6 +1,6 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
 
-export class Book {
+export class AddBook {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) bookSelected;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) api;
@@ -44,14 +44,13 @@ export class Book {
     }
   }
 
-  async tradeEvent(ownerIndex, owner) {
+  async tradeEvent(owner) {
     let result = null;
 
     if(owner.elem.dataset.status === '0') {
       result = await this.api.submitRequest(this.bookSelected.id, owner.username, this.state.user.username);
       if(result.update) {
         owner.elem.dataset.status = '1';
-        this.bookSelected.owners[ownerIndex].requests[this.state.user.username] = '1';
       }
       else {
         document.getElementById('book-request-error').style.display = 'block';
@@ -62,7 +61,6 @@ export class Book {
       result = await this.api.cancelRequest(this.bookSelected.id, owner.username, this.state.user.username)
       if(result.update) {
         owner.elem.dataset.status = '0';
-        this.bookSelected.owners[ownerIndex].requests[this.state.user.username] = '0';
       }
       else {
         document.getElementById('book-request-error').style.display = 'block';

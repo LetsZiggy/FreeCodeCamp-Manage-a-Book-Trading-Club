@@ -75,6 +75,71 @@ export class ApiInterface {
     return({ update: true });
   }
 
+  searchBook(title) {
+    return(
+      this.http.fetch(`/book/search`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ title: title })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
+  }
+
+  addBook(book, username) {
+    return(
+      this.http.fetch(`/book/add`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, username: username })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
+  }
+
+  removeBook(book, username) {
+    // return(
+    //   this.http.fetch(`/book/remove`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, username: username })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ remove: true });
+  }
+
+  setLocation(location, username) {
+    return(
+      this.http.fetch(`/user/location`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ location: location, username: username })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
+  }
+
   getUserNames(username) {
     return(
       this.http.fetch(`/user/checkname`, {

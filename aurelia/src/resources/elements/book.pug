@@ -18,7 +18,7 @@ template
         #book-detail-isowner(if.bind="bookSelected.showList.detailIsOwner") You have this book
         #book-detail-tradable-list(if.bind="bookSelected.showList.detailTradableList")
           .title Request trade with:
-          .tradable(repeat.for="owner of bookSelected.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="tradeEvent(owner)")
+          .tradable(repeat.for="owner of bookSelected.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="tradeEvent($index, owner)")
             span.username ${owner.username}
             span.location ${owner.location}
             span.status ${owner.requests[state.user.username] === '1' ? 'Request sent' : 'Request accepted'}

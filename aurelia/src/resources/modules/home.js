@@ -25,10 +25,16 @@ export class Home {
         link: 'https://www.example.com/',
         owners: [
           {
-            username: 'requestUser',
-            location: 'test-location test-location',
+            username: 'requestUser-1',
+            location: 'test-location-1',
             requests: {
-              'testUser': '1'
+              'testUser': '2'
+            }
+          },
+          {
+            username: 'requestUser-2',
+            location: 'test-location-2',
+            requests: {
             }
           }
         ]
@@ -37,46 +43,19 @@ export class Home {
         id: 'test-id-2',
         title: 'test-book-2',
         authors: ['test-author-2'],
-        image: 'http://via.placeholder.com/175x300',
+        image: 'http://via.placeholder.com/350x350',
         link: 'https://www.example.com/',
         owners: [
           {
-            username: 'requestUser',
-            location: '',
+            username: 'requestUser-3',
+            location: 'test-location-3',
             requests: {
-              'testUser': '2'
             }
-          }
-        ]
-      });
-      this.state.books.push({
-        id: 'test-id-3',
-        title: 'test-book-3',
-        authors: ['test-author-3'],
-        image: 'http://via.placeholder.com/375x300',
-        link: 'https://www.example.com/',
-        owners: [
+          },
           {
-            username: 'requestUser',
-            location: '',
+            username: 'requestUser-4',
+            location: 'test-location-4',
             requests: {
-              'testUser': '0'
-            }
-          }
-        ]
-      });
-      this.state.books.push({
-        id: 'test-id-4',
-        title: 'test-book-4',
-        authors: ['test-author-4'],
-        image: 'http://via.placeholder.com/300x450',
-        link: 'https://www.example.com/',
-        owners: [
-          {
-            username: 'testUser',
-            location: 'test-location',
-            requests: {
-              'requestUser': '0'
             }
           }
         ]
@@ -99,9 +78,9 @@ export class Home {
     }
 
     if(this.state.books.length) {
-      this.books = this.state.books.map((v, i, a) => v);
-      this.books.forEach((v, i, a) => {
+      this.books = this.state.books.map((v, i, a) => {
         v.ownerList = v.owners.map((mv, mi, ma) => mv.username);
+        return(v);
       });
     }
 

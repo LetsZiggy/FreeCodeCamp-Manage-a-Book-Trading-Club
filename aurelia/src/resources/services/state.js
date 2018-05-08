@@ -10,6 +10,7 @@ export const state = {
     // username: null,
     expire: null,
     interval: null,
+    location: null,
     book: null
   },
   webSocket: null,

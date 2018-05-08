@@ -1,4 +1,4 @@
-#book
+#add-book
   position        : absolute
   left            : 0rem
   top             : 0rem
@@ -14,10 +14,10 @@
   visibility      : hidden
   pointer-events  : none
 
-  #book-background:hover
+  #add-book-background:hover
     background-color : rgba(0, 0, 0, 0.8)
 
-  #book-background
+  #add-book-background
     position         : absolute
     left             : 0rem
     top              : 0rem
@@ -27,10 +27,10 @@
     background-color : rgba(0, 0, 0, 0.75)
     cursor           : pointer
 
-  #book-close-button:hover
+  #add-book-close-button:hover
     background-color : darkgrey
 
-  #book-close-button
+  #add-book-close-button
     position         : absolute
     right            : 1.5rem
     top              : 3.5rem
@@ -49,7 +49,7 @@
       width     : 2rem
       height    : 2rem
 
-  #book-container
+  #add-book-container
     position         : relative
     display          : flex
     flex-direction   : row
@@ -64,7 +64,7 @@
     margin           : 0rem
     background-color : white
 
-    #book-image
+    #add-book-image
       display         : flex
       flex-direction  : column
       flex-wrap       : nowrap
@@ -80,7 +80,7 @@
         width  : auto
         height : 100%
 
-    #book-details
+    #add-book-details
       display         : flex
       flex-direction  : column
       flex-wrap       : nowrap
@@ -92,7 +92,7 @@
       box-sizing      : border-box
       padding         : 1rem
 
-      #book-detail-info
+      #add-book-detail-info
         display         : flex
         flex-direction  : column
         flex-wrap       : nowrap
@@ -102,10 +102,10 @@
         width           : 100%
         height          : 50%
 
-        #book-detail-title:hover
+        #add-book-detail-title:hover
           color : steelblue
 
-        #book-detail-title
+        #add-book-detail-title
           font-size       : 1.5rem
           font-weight     : bolder
           line-height     : 1.25rem
@@ -118,13 +118,13 @@
             height : 0.75rem
             margin : 0.25rem
 
-        #book-detail-authors
+        #add-book-detail-authors
           font-size   : 0.85rem
           line-height : 0.85rem
           color       : grey
           margin      : 0rem 0rem 1rem 0rem
 
-      #book-detail-options
+      #add-book-detail-options
         display         : flex
         flex-direction  : column
         flex-wrap       : nowrap
@@ -136,11 +136,11 @@
         padding         : 0.5rem 0rem 0rem 0rem
         margin          : 0rem
 
-        #book-detail-notlogin:hover
+        #add-book-detail-notlogin:hover
           border           : 1px solid grey
           background-color : lightgrey
 
-        #book-detail-notlogin
+        #add-book-detail-notlogin
           display          : block
           align-self       : center
           box-sizing       : border-box
@@ -150,7 +150,7 @@
           background-color : whitesmoke
           cursor           : pointer
 
-        #book-detail-isowner
+        #add-book-detail-isowner
           display          : block
           align-self       : center
           box-sizing       : border-box
@@ -160,7 +160,7 @@
           color            : whitesmoke
           user-select      : none
 
-        #book-detail-tradable-list
+        #add-book-detail-tradable-list
           display         : flex
           flex-direction  : row
           flex-wrap       : wrap
@@ -184,7 +184,7 @@
             color           : lightgrey
 
           .tradable[data-status="0"]:hover
-            background-color : greenyellow
+            background-color : gainsboro
 
           .tradable[data-status="0"]
             border : 1px solid gainsboro
@@ -209,10 +209,10 @@
               display : inline-block
 
           .tradable[data-status="1"]
-            background-color : greenyellow
+            background-color : yellow
 
           .tradable[data-status="2"]
-            background-color : lightskyblue
+            background-color : lime
 
           .tradable
             position         : relative
@@ -227,8 +227,6 @@
             margin           : 0rem 0.25rem 0.25rem 0.25rem
             background-color : white
             cursor           : pointer
-            font-size        : 0.65rem
-            line-height      : 0.75rem
 
             span
               pointer-events : none
@@ -240,7 +238,9 @@
               color       : black
 
             .location, .status
-              color : grey
+              font-size   : 0.65rem
+              line-height : 0.75rem
+              color       : grey
 
             .cancel
               position         : absolute
@@ -254,13 +254,15 @@
               align-content    : center
               width            : 100%
               height           : 100%
+              font-size        : 0.75rem
               font-weight      : bolder
+              line-height      : 0.75rem
               color            : white
               background-color : crimson
               box-sizing       : border-box
               overflow         : hidden
 
-  #book-request-error
+  #add-book-request-error
     position         : absolute
     left             : 50%
     top              : 3.5rem

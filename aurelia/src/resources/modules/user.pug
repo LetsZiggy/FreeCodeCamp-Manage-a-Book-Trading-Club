@@ -2,33 +2,42 @@ template
   #content.user-content
     #options-row
       #location
-        button#location-show(click.delegate="setLocation('show')") Set Location
-        input#location-input(type="text" placeholder="Set your location" value="userLocation")
-        button#location-save(click.delegate="setLocation('location-input')") Save
-      #add-book(click.delegate="addBook()") Add Book
+        input#location-input(type="text" placeholder="Set your preferred meetup address" value.bind="userLocation")
+        #location-save(click.delegate="setLocation('location-input')")
+          img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_save_black_24px.svg")
+      #add-book(click.delegate="showAddBook()") Add Book
+
     #books-row-empty(if.bind="!books.length")
       | No books
       br
       | in your
       br
       | bookshelf
+
     #books-row(if.bind="books.length")
-      .book(repeat.for="book of books")
-        input.book-checkbox(type="checkbox" id="checkbox-${book.id}" ref="book.checkbox")
+      .book(repeat.for="book of books" ref="book.elem")
+        input.book-checkbox(type="checkbox" id="checkbox-${book.id}")
         .book-main
           img.book-cover(src="${book.image}")
           .book-info
             .book-title ${book.title}
+            .book-authors Author${bookSelected.authors.length === 1 ? '' : 's'}: ${book.authors | authors}
             .book-options
-              label.book-no-requests(if.bind="!book.requests.length") No Requests
-              label.book-requests(if.bind="book.requests.length" id="label-open-${book.id}" for="checkbox-${book.id}") ${book.checkbox.checked ? 'Close Requests' : 'Show Requests'}
-              label.book-remove(click.delegate="removeBook(book.id)") Remove Book
-        .book-list
-          .book-list-title
+              label.book-no-requests(if.bind="!book.requestList.length") No Requests
+              label.book-has-requests(if.bind="book.requestList.length" id="label-open-${book.id}" click.delegate="showRequests(book)") Show Requests
+              label.book-remove(click.delegate="removeBook(book)") Remove Book
+        .book-requests
+          .book-requests-title
             | Members requesting for trade&nbsp;
-            span (click to send message)
+            span (click to accept/cancel request)
             | &nbsp;:
-          .request(repeat.for="request of book.requests" click.delegate="openMessage(request)") ${request}
+          .request(repeat.for="request of book.requestList" data-status="${request.status}")
+            .request-details
+              span.username ${request.username}
+              span.status ${request.status === '1' ? 'User requesting' : 'Awaiting exchange'}
+            .request-actions
+              span.accept(click.delegate="handleRequest('accept', request, book)") Accept
+              span.done(click.delegate="handleRequest('done', request, book)") Done
+              span.cancel(click.delegate="handleRequest('cancel', request, book)") Cancel
 
-    new-book#add-book
-    message#message(message.bind="message")
+    add-book#add-book

@@ -9,7 +9,7 @@ export class User {
 
   constructor(ApiInterface) {
     this.api = ApiInterface;
-    this.userLocation = '';
+    this.userLocation = null;
     this.books = [];
   }
 
@@ -27,17 +27,18 @@ export class User {
         authors: ['test-author-1'],
         image: 'http://via.placeholder.com/250x350',
         link: 'https://www.example.com/',
+        ownerList: ['otherUser-1', 'otherUser-2', 'testUser'],
         owners: [
-          // {
-          //   username: 'otherUser-1',
-          //   location: 'other-location-1',
-          //   requests: {}
-          // },
-          // {
-          //   username: 'otherUser-2',
-          //   location: 'other-location-2',
-          //   requests: {}
-          // },
+          {
+            username: 'otherUser-1',
+            location: 'other-location-1',
+            requests: {}
+          },
+          {
+            username: 'otherUser-2',
+            location: 'other-location-2',
+            requests: {}
+          },
           {
             username: 'testUser',
             location: 'test-location',
@@ -54,6 +55,7 @@ export class User {
         authors: ['test-author-2', 'test-author-3'],
         image: 'http://via.placeholder.com/450x350',
         link: 'https://www.example.com/',
+        ownerList: ['testUser', 'otherUser-3'],
         owners: [
           {
             username: 'testUser',
@@ -70,12 +72,24 @@ export class User {
           }
         ]
       });
+      this.state.books.push({
+        id: 'test-id-temp-1',
+        title: 'test-book-temp-1',
+        authors: ['author'],
+        image: 'http://via.placeholder.com/250x300',
+        link: 'https://www.example.com',
+        ownerList: ['otherUser-3'],
+        owners: [
+          {
+            username: 'otherUser-3',
+            location: 'other-location-3',
+            requests: {}
+          }
+        ]
+      });
     }
     this.initialise();
-
-    if(this.state.user.location) {
-      this.userLocation = this.state.user.location;
-    }
+    this.userLocation = this.state.user.location ? this.state.user.location : '';
   }
 
   detached() {
@@ -83,13 +97,16 @@ export class User {
 
   async initialise() {
     if(!this.state.books.length) {
-      let response = await this.api.getBookshelf();
-      this.state.books = response.bookshelf.map((v, i, a) => v);
+      response = await this.api.getBookshelf();
+      this.state.books = response.bookshelf.map((v, i, a) => {
+        v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
+        return(v);
+      });
     }
 
     if(this.state.books.length) {
       this.books = this.state.books.reduce((acc, v, i, a) => {
-        let ownerIndex = v.owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
+        let ownerIndex = v.ownerList.indexOf(this.state.user.username);
         if(ownerIndex !== -1) {
           v.requestList = Object.entries(v.owners[ownerIndex].requests).map(([mk, mv]) => [mk, mv]).reduce((raac, rv, ri, ra) => {
             if(rv[1] === '1' || rv[1] === '2') {
@@ -102,6 +119,35 @@ export class User {
         return(acc);
       }, []);
     }
+  }
+
+  async setLocation(input, button) {
+    let inputElem = document.getElementById(input);
+    let buttonElem = document.getElementById(button);
+
+    if(inputElem.value !== '' && inputElem.value !== this.state.user.location) {
+      console.log('inside 1');
+      let result = await this.api.setLocation(inputElem.value, this.state.user.username);
+
+      if(result.update) {
+        this.state.user.location = inputElem.value;
+        buttonElem.classList.add('saved');
+
+        setTimeout(() => {
+          buttonElem.classList.remove('saved');
+        }, 1000);
+      }
+    }
+    else {
+      inputElem.focus();
+      buttonElem.classList.add('not-saved');
+
+      setTimeout(() => {
+        buttonElem.classList.remove('not-saved');
+      }, 1000);
+    }
+
+    return(true);
   }
 
   showRequests(book) {
@@ -132,15 +178,17 @@ export class User {
     let bookID = book.id;
     let ownerIndex = book.owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
 
-    book.requestList.forEach((v, i, a) => {
+    // book.requestList.forEach((v, i, a) => {
       // promiseList.push(this.api.cancelRequest(book, this.state.user.username, v.username));
       // book.owners[ownerIndex].requests[v.username] = '0';
-      delete book.owners[ownerIndex].requests[v.username];
-    });
+      // delete book.owners[ownerIndex].requests[v.username];
+    // });
 
     while(book.requestList.length) {
       book.requestList.pop();
     }
+
+    book.ownerList.splice(ownerIndex, 1);
 
     // Promise.all(promiseList).then(async () => {
     //   let result = await this.api.removeBook(bookID, this.state.user.username);
@@ -171,13 +219,66 @@ export class User {
         this.state.books.splice(bookIndex, 1);
       }
     }
+
+    return(true);
   }
 
-  handleRequest(type, request, book) {
-    console.log(book.elem.children[2].children[1].dataset.status);
+  async handleRequest(type, requestIndex, book) {
+    let ownerIndex = book.owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
+    let requester = book.requestList[requestIndex].username;
+    
+    if(type === 'accept') {
+      let result = await this.api.ownerAccept(book.id, this.state.user.username, book.requestList[requestIndex].username);
+
+      if(result.update) {
+        book.elem.children[2].children[requestIndex + 1].dataset.status = '2';
+        book.requestList[requestIndex].status = '2';
+        book.owners[ownerIndex].requests[requester] = '2';
+      }
+    }
+    else if(type === 'done') {
+      let result = await this.api.ownerDone(book.id, this.state.user.username, book.requestList[requestIndex].username);
+
+      if(result.update) {
+        let bookID = book.id;
+
+        book.owners.push({ username: requester, location: '', requests: {} });
+
+        book.requestList.forEach((v, i, a) => {
+          delete book.owners[ownerIndex].requests[v.username];
+        });
+
+        while(book.requestList.length) {
+          book.requestList.pop();
+        }
+
+        let bookIndex = null;
+
+        bookIndex = this.books.map((v, i, a) => v.id).indexOf(bookID);
+        this.books.splice(bookIndex, 1);
+
+        bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(bookID);
+        this.state.books[bookIndex].owners.splice(ownerIndex, 1);
+      }
+    }
+    else {
+      let result = await this.api.ownerCancel(book.id, this.state.user.username, book.requestList[requestIndex].username);
+      if(result.update) {
+        book.elem.children[2].children[requestIndex + 1].dataset.status = '0';
+        book.requestList[requestIndex].status = '0';
+        book.owners[ownerIndex].requests[requester] = '0';
+
+        book.requestList.splice(requestIndex, 1);
+        delete book.owners[ownerIndex].requests[requester];
+      }
+    }
+
+    return(true);
   }
 
   showAddBook() {
-
+    document.getElementById('add-book').style.visibility = 'visible';
+    document.getElementById('add-book').style.pointerEvents = 'auto';
+    document.getElementById('add-book-form-input').focus();
   }
 }

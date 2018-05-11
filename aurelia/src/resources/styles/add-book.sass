@@ -51,221 +51,224 @@
 
   #add-book-container
     position         : relative
+    transform        : translateY(3.5rem)
     display          : flex
-    flex-direction   : row
+    flex-direction   : column
     flex-wrap        : nowrap
     justify-content  : flex-start
     align-items      : flex-start
     align-content    : flex-start
-    width            : auto
-    height           : 15rem
+    width            : 75vw
+    height           : 60vh
     box-sizing       : border-box
     padding          : 0rem
     margin           : 0rem
     background-color : white
+    overflow         : hidden
 
-    #add-book-image
+    #add-book-form
       display         : flex
-      flex-direction  : column
+      flex-direction  : row
+      flex-wrap       : nowrap
+      justify-content : flex-start
+      align-items     : center
+      align-content   : flex-start
+      width           : 100%
+      height          : 2.5rem
+      box-sizing      : border-box
+      border-bottom   : 1px solid lightgrey
+      margin          : 0rem
+      padding         : 0rem
+
+      #add-book-form-input
+        width            : calc(100% - 2.5rem)
+        height           : 100%
+        box-sizing       : border-box
+        border           : 0px solid rgba(0, 0, 0, 0)
+        outline          : none
+        margin           : 0rem
+        padding          : 0rem 1rem
+        font-size        : 0.85rem
+        background-color : white
+
+      #add-book-form-button:hover
+        background-color : lightgrey
+
+      #add-book-form-button
+        display          : inline-flex
+        flex-direction   : row
+        flex-wrap        : nowrap
+        justify-content  : center
+        align-items      : center
+        align-content    : center
+        width            : 2.5rem
+        height           : 100%
+        background-color : white
+        box-sizing       : border-box
+        border           : 0px solid rgba(0, 0, 0, 0)
+        margin           : 0rem
+        padding          : 0rem
+        cursor           : pointer
+
+        img
+          width  : 1.25rem
+          height : 1.25rem
+
+    #add-book-no-results
+      display         : flex
+      flex-direction  : row
       flex-wrap       : nowrap
       justify-content : center
       align-items     : center
       align-content   : center
-      width           : auto
-      height          : 100%
+      width           : 100%
+      height          : calc(100% - 5rem)
       box-sizing      : border-box
-      padding         : 3px
+      padding         : 0rem
+      margin          : 0rem
+      overflow        : auto
+      font-size       : 2.5rem
+      font-weight     : bolder
+      color           : whitesmoke
 
-      img
-        width  : auto
-        height : 100%
-
-    #add-book-details
+    #add-book-results
       display         : flex
-      flex-direction  : column
-      flex-wrap       : nowrap
-      justify-content : flex-start
+      flex-direction  : row
+      flex-wrap       : wrap
+      justify-content : space-around
       align-items     : flex-start
       align-content   : flex-start
-      width           : 25rem
-      height          : 100%
+      width           : 100%
+      height          : calc(100% - 5rem)
       box-sizing      : border-box
-      padding         : 1rem
+      padding         : 0.5rem
+      margin          : 0rem
+      overflow        : auto
 
-      #add-book-detail-info
-        display         : flex
+      .result:hover
+        .result-checkbox:checked ~ .result-details
+          .result-details-selected
+            background-color : crimson
+
+        .result-details
+          .result-details-selected
+            background-color : greenyellow
+
+      .result
+        display         : inline-flex
         flex-direction  : column
         flex-wrap       : nowrap
         justify-content : flex-start
-        align-items     : flex-start
+        align-items     : center
         align-content   : flex-start
-        width           : 100%
-        height          : 50%
+        min-width       : 5rem
+        width           : auto
+        height          : auto
+        box-sizing      : border-box
+        padding         : 0rem
+        margin          : 0rem 0.5rem
+        cursor          : pointer
 
-        #add-book-detail-title:hover
-          color : steelblue
+        .result-checkbox:checked ~ .result-details
+          .result-details-selected
+            img
+              display : block
 
-        #add-book-detail-title
-          font-size       : 1.5rem
-          font-weight     : bolder
-          line-height     : 1.25rem
-          text-decoration : underline
-          color           : black
-          margin          : 0.5rem 0rem 1rem 0rem
+        .result-checkbox
+          display : none
 
-          img
-            width  : 0.75rem
-            height : 0.75rem
-            margin : 0.25rem
-
-        #add-book-detail-authors
-          font-size   : 0.85rem
-          line-height : 0.85rem
-          color       : grey
-          margin      : 0rem 0rem 1rem 0rem
-
-      #add-book-detail-options
-        display         : flex
-        flex-direction  : column
-        flex-wrap       : nowrap
-        justify-content : flex-start
-        align-items     : flex-start
-        align-content   : flex-start
-        width           : 100%
-        height          : 50%
-        padding         : 0.5rem 0rem 0rem 0rem
-        margin          : 0rem
-
-        #add-book-detail-notlogin:hover
-          border           : 1px solid grey
-          background-color : lightgrey
-
-        #add-book-detail-notlogin
-          display          : block
-          align-self       : center
-          box-sizing       : border-box
-          border           : 1px solid lightgrey
-          padding          : 0.5rem
-          margin           : auto 0rem 0rem 0rem
-          background-color : whitesmoke
-          cursor           : pointer
-
-        #add-book-detail-isowner
-          display          : block
-          align-self       : center
-          box-sizing       : border-box
-          padding          : 0.5rem
-          margin           : auto 0rem 0rem 0rem
-          background-color : seagreen
-          color            : whitesmoke
-          user-select      : none
-
-        #add-book-detail-tradable-list
+        .result-details
+          position        : relative
           display         : flex
-          flex-direction  : row
-          flex-wrap       : wrap
+          flex-direction  : column
+          flex-wrap       : nowrap
           justify-content : flex-start
-          align-items     : flex-start
+          align-items     : center
           align-content   : flex-start
+          min-width       : 5rem
           width           : 100%
           height          : 100%
           box-sizing      : border-box
-          border-top      : 1px solid lightgrey
+          padding         : 0rem
+          margin          : 0rem
+          user-select     : none
+          pointer-events  : none
 
-          .title
-            display         : block
-            width           : 100%
-            height          : auto
-            padding         : 0.5rem 0rem 0rem 0rem
-            margin          : 0rem 0rem 0.5rem 0rem
-            font-size       : 0.85rem
-            line-height     : 0.85rem
-            text-decoration : underline
-            color           : lightgrey
-
-          .tradable[data-status="0"]:hover
-            background-color : gainsboro
-
-          .tradable[data-status="0"]
-            border : 1px solid gainsboro
-
-            .location
-              display : inline-block
-
-            .status
-              display : none
-
-          .tradable[data-status="1"]:hover, .tradable[data-status="2"]:hover
-            .cancel
-              display : flex
-
-          .tradable[data-status="1"], .tradable[data-status="2"]
-            border : 0px solid rgba(0, 0, 0, 0)
-
-            .location
-              display : none
-
-            .status
-              display : inline-block
-
-          .tradable[data-status="1"]
-            background-color : yellow
-
-          .tradable[data-status="2"]
-            background-color : lime
-
-          .tradable
-            position         : relative
-            display          : flex
-            flex-direction   : column
+          .result-details-selected
+            position         : absolute
+            right            : 0.5rem
+            top              : 0.5rem
+            display          : inline-flex
+            flex-direction   : row
             flex-wrap        : nowrap
-            justify-content  : flex-start
-            align-items      : flex-start
-            align-content    : flex-start
+            justify-content  : center
+            align-items      : center
+            align-content    : center
+            width            : 0.75rem
+            height           : 0.75rem
             box-sizing       : border-box
-            padding          : 0.25rem
-            margin           : 0rem 0.25rem 0.25rem 0.25rem
+            border           : 1px solid lightgrey
             background-color : white
-            cursor           : pointer
+            overflow         : visible
 
-            span
-              pointer-events : none
-              user-select    : none
+            img
+              display : none
+              width   : 1rem
+              height  : 1rem
 
-            .username
-              font-size   : 0.85rem
-              line-height : 0.85rem
-              color       : black
+          .result-details-image
+            display         : inline-flex
+            flex-direction  : row
+            flex-wrap       : nowrap
+            justify-content : center
+            align-items     : flex-start
+            align-content   : flex-start
+            width           : 100%
+            height          : 7.5rem
 
-            .location, .status
-              font-size   : 0.65rem
-              line-height : 0.75rem
-              color       : grey
+            img
+              width  : auto
+              height : 100%
 
-            .cancel
-              position         : absolute
-              left             : 0rem
-              top              : 0rem
-              display          : none
-              flex-direction   : column
-              flex-wrap        : nowrap
-              justify-content  : center
-              align-items      : center
-              align-content    : center
-              width            : 100%
-              height           : 100%
-              font-size        : 0.75rem
-              font-weight      : bolder
-              line-height      : 0.75rem
-              color            : white
-              background-color : crimson
-              box-sizing       : border-box
-              overflow         : hidden
+          .result-details-title
+            display         : inline-flex
+            flex-direction  : row
+            flex-wrap       : wrap
+            justify-content : center
+            align-items     : flex-start
+            align-content   : flex-start
+            width           : auto
+            height          : 2.5rem
+            font-size       : 0.75rem
+            line-height     : 0.75rem
+            word-wrap       : break-word
+
+    #add-button-confirm:disabled, #add-button-confirm:disabled:hover
+      background-color : grey
+      color            : whitesmoke
+      cursor           : not-allowed
+
+    #add-button-confirm:hover
+      background-color : greenyellow
+
+    #add-button-confirm
+      width            : 100%
+      height           : 2.5rem
+      box-sizing       : border-box
+      border           : 0px solid rgba(0, 0, 0, 0)
+      border-top       : 1px solid lightgrey
+      padding          : 0.5rem
+      margin           : 0rem
+      background-color : white
+      box-shadow       : 0rem 0rem 0rem 0rem rgba(0, 0, 0, 0)
+      font-size        : 1.25rem
+      line-height      : 1.25rem
+      cursor           : pointer
 
   #add-book-request-error
     position         : absolute
     left             : 50%
-    top              : 3.5rem
+    top              : 2.5rem
     transform        : translateX(-50%)
     z-index          : 3
     display          : none
@@ -275,7 +278,7 @@
     box-sizing       : border-box
     padding          : 0.5rem 1rem
     margin           : 1rem 0rem 0rem 0rem
-    background-color : white
+    background-color : whitesmoke
     color            : crimson
     text-align       : center
     pointer-events   : none

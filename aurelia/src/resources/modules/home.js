@@ -23,6 +23,7 @@ export class Home {
         authors: ['test-author-1'],
         image: 'http://via.placeholder.com/250x350',
         link: 'https://www.example.com/',
+        ownerList: ['requestUser-1', 'requestUser-2'],
         owners: [
           {
             username: 'requestUser-1',
@@ -34,8 +35,7 @@ export class Home {
           {
             username: 'requestUser-2',
             location: 'test-location-2',
-            requests: {
-            }
+            requests: {}
           }
         ]
       });
@@ -45,18 +45,17 @@ export class Home {
         authors: ['test-author-2'],
         image: 'http://via.placeholder.com/350x350',
         link: 'https://www.example.com/',
+        ownerList: ['requestUser-3', 'requestUser-4'],
         owners: [
           {
             username: 'requestUser-3',
             location: 'test-location-3',
-            requests: {
-            }
+            requests: {}
           },
           {
             username: 'requestUser-4',
             location: 'test-location-4',
-            requests: {
-            }
+            requests: {}
           }
         ]
       });
@@ -74,14 +73,14 @@ export class Home {
   async initialise() {
     if(!this.state.books.length) {
       let response = await this.api.getBookshelf();
-      this.state.books = response.bookshelf.map((v, i, a) => v);
+      this.state.books = response.bookshelf.map((v, i, a) => {
+        v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
+        return(v);
+      });
     }
 
     if(this.state.books.length) {
-      this.books = this.state.books.map((v, i, a) => {
-        v.ownerList = v.owners.map((mv, mi, ma) => mv.username);
-        return(v);
-      });
+      this.books = this.state.books.map((v, i, a) => v);
     }
 
     document.getElementById('filter-input').disabled = false;
@@ -125,8 +124,8 @@ export class Home {
       this.bookSelected.showList.detailTradableList = false;
     }
 
-    document.getElementById('book').style.visibility = 'visible';
-    document.getElementById('book').style.pointerEvents = 'auto';
-    document.getElementById('book-request-error').style.display = 'none';
+    document.getElementById('book-selected').style.visibility = 'visible';
+    document.getElementById('book-selected').style.pointerEvents = 'auto';
+    document.getElementById('book-selected-request-error').style.display = 'none';
   }
 }

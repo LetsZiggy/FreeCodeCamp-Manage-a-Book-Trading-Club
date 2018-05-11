@@ -1,6 +1,6 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
 
-export class Book {
+export class BookSelected {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) bookSelected;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) api;
@@ -23,11 +23,11 @@ export class Book {
     }
   }
 
-  closeBook() {
+  closeBookSelected() {
     this.state.user.book = null;
     this.bookSelected = null;
-    document.getElementById('book').style.visibility = 'hidden';
-    document.getElementById('book').style.pointerEvents = 'none';
+    document.getElementById('book-selected').style.visibility = 'hidden';
+    document.getElementById('book-selected').style.pointerEvents = 'none';
   }
 
   bookToLogin() {
@@ -35,38 +35,29 @@ export class Book {
     this.router.navigateToRoute('login');
   }
 
-  setTradeStatus(owner) {
-    if(!this.state.user.username) {
-      return('0');
-    }
-    else {
-      return(owner.requests[this.state.user.username]);
-    }
-  }
-
-  async tradeEvent(ownerIndex, owner) {
+  async handleRequest(ownerIndex, owner) {
     let result = null;
 
     if(owner.elem.dataset.status === '0') {
-      result = await this.api.submitRequest(this.bookSelected.id, owner.username, this.state.user.username);
+      result = await this.api.requesterSubmit(this.bookSelected.id, owner.username, this.state.user.username);
       if(result.update) {
         owner.elem.dataset.status = '1';
         this.bookSelected.owners[ownerIndex].requests[this.state.user.username] = '1';
       }
       else {
-        document.getElementById('book-request-error').style.display = 'block';
-        setTimeout(() => { document.getElementById('book-request-error').style.display = 'none'; }, 3000);
+        document.getElementById('book-selected-request-error').style.display = 'block';
+        setTimeout(() => { document.getElementById('book-selected-request-error').style.display = 'none'; }, 3000);
       }
     }
     else {
-      result = await this.api.cancelRequest(this.bookSelected.id, owner.username, this.state.user.username)
+      result = await this.api.requesterCancel(this.bookSelected.id, owner.username, this.state.user.username)
       if(result.update) {
         owner.elem.dataset.status = '0';
         this.bookSelected.owners[ownerIndex].requests[this.state.user.username] = '0';
       }
       else {
-        document.getElementById('book-request-error').style.display = 'block';
-        setTimeout(() => { document.getElementById('book-request-error').style.display = 'none'; }, 3000);
+        document.getElementById('book-selected-request-error').style.display = 'block';
+        setTimeout(() => { document.getElementById('book-selected-request-error').style.display = 'none'; }, 3000);
       }
     }
   }

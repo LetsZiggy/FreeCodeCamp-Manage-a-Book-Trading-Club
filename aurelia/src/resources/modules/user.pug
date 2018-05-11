@@ -3,9 +3,9 @@ template
     #options-row
       #location
         input#location-input(type="text" placeholder="Set your preferred meetup address" value.bind="userLocation")
-        #location-save(click.delegate="setLocation('location-input')")
-          img(src="https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_save_black_24px.svg")
-      #add-book(click.delegate="showAddBook()") Add Book
+        #location-save(click.delegate="setLocation('location-input', 'location-save')")
+          img(src="https://material.io/tools/icons/static/icons/baseline-save-24px.svg")
+      #add-book-button(click.delegate="showAddBook()") Add Book
 
     #books-row-empty(if.bind="!books.length")
       | No books
@@ -21,7 +21,9 @@ template
           img.book-cover(src="${book.image}")
           .book-info
             .book-title ${book.title}
-            .book-authors Author${bookSelected.authors.length === 1 ? '' : 's'}: ${book.authors | authors}
+            .book-authors
+              span Author${bookSelected.authors.length === 1 ? '' : 's'}:&nbsp;
+              | ${book.authors | authors}
             .book-options
               label.book-no-requests(if.bind="!book.requestList.length") No Requests
               label.book-has-requests(if.bind="book.requestList.length" id="label-open-${book.id}" click.delegate="showRequests(book)") Show Requests
@@ -36,8 +38,8 @@ template
               span.username ${request.username}
               span.status ${request.status === '1' ? 'User requesting' : 'Awaiting exchange'}
             .request-actions
-              span.accept(click.delegate="handleRequest('accept', request, book)") Accept
-              span.done(click.delegate="handleRequest('done', request, book)") Done
-              span.cancel(click.delegate="handleRequest('cancel', request, book)") Cancel
+              span.accept(click.delegate="handleRequest('accept', $index, book)") Accept
+              span.done(click.delegate="handleRequest('done', $index, book)") Done
+              span.cancel(click.delegate="handleRequest('cancel', $index, book)") Cancel
 
-    add-book#add-book
+    add-book#add-book(state.bind="state" api.bind="api" books.bind="books")

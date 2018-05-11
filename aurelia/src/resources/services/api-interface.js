@@ -41,70 +41,91 @@ export class ApiInterface {
     );
   }
 
-  submitRequest(book, owner, requester) {
+  searchTitle(title) {
     // return(
-    //   this.http.fetch(`/request/submit`, {
+    //   this.http.fetch(`/book/search`, {
     //              method: 'POST',
     //              credentials: 'same-origin',
     //              headers: {
     //               'Accept': 'application/json',
     //               'Content-Type': 'application/json'
     //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //              body: JSON.stringify({ title: title })
     //            })
     //            .then(response => response.json())
     //            .then(data => data)
     // );
-    return({ update: true });
+    return({
+      search : true,
+      books : [
+        {
+          id: 'test-id-temp-1',
+          title: 'test-book-temp-1',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/250x300',
+          link: 'https://www.example.com'
+        },
+        {
+          id: 'test-id-temp-2',
+          title: 'test-book-temp-2',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/300x250',
+          link: 'https://www.example.com'
+        },
+        {
+          id: 'test-id-temp-3',
+          title: 'test-book-temp-3',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/350x250',
+          link: 'https://www.example.com'
+        },
+        {
+          id: 'test-id-temp-4',
+          title: 'test-book-temp-4',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/300x300',
+          link: 'https://www.example.com'
+        },
+        {
+          id: 'test-id-temp-4',
+          title: 'test-book-temp-4',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/250x250',
+          link: 'https://www.example.com'
+        },
+        {
+          id: 'test-id-temp-5',
+          title: 'test-book-temp-5',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/375x250',
+          link: 'https://www.example.com'
+        },
+        {
+          id: 'test-id-temp-6',
+          title: 'test-book-temp-6',
+          authors: ['author'],
+          image: 'http://via.placeholder.com/350x275',
+          link: 'https://www.example.com'
+        }
+      ]
+    });
   }
 
-  cancelRequest(book, owner, requester) {
+  addBook(book, username, location) {
     // return(
-    //   this.http.fetch(`/request/cancel`, {
+    //   this.http.fetch(`/book/add`, {
     //              method: 'POST',
     //              credentials: 'same-origin',
     //              headers: {
     //               'Accept': 'application/json',
     //               'Content-Type': 'application/json'
     //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //              body: JSON.stringify({ book: book, username: username, location: location })
     //            })
     //            .then(response => response.json())
     //            .then(data => data)
     // );
-    return({ update: true });
-  }
-
-  searchBook(title) {
-    return(
-      this.http.fetch(`/book/search`, {
-                 method: 'POST',
-                 credentials: 'same-origin',
-                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify({ title: title })
-               })
-               .then(response => response.json())
-               .then(data => data)
-    );
-  }
-
-  addBook(book, username) {
-    return(
-      this.http.fetch(`/book/add`, {
-                 method: 'POST',
-                 credentials: 'same-origin',
-                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify({ book: book, username: username })
-               })
-               .then(response => response.json())
-               .then(data => data)
-    );
+    return({ add: true });
   }
 
   removeBook(book, username) {
@@ -125,19 +146,105 @@ export class ApiInterface {
   }
 
   setLocation(location, username) {
-    return(
-      this.http.fetch(`/user/location`, {
-                 method: 'POST',
-                 credentials: 'same-origin',
-                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify({ location: location, username: username })
-               })
-               .then(response => response.json())
-               .then(data => data)
-    );
+    // return(
+    //   this.http.fetch(`/user/location`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ location: location, username: username })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
+  }
+
+  requesterSubmit(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/submit`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
+  }
+
+  requesterCancel(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/cancel`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
+  }
+
+  ownerAccept(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/accept`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
+  }
+
+  ownerDone(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/done`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
+  }
+
+  ownerCancel(book, owner, requester) {
+    // return(
+    //   this.http.fetch(`/request/cancel`, {
+    //              method: 'POST',
+    //              credentials: 'same-origin',
+    //              headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //              },
+    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
+    //            })
+    //            .then(response => response.json())
+    //            .then(data => data)
+    // );
+    return({ update: true });
   }
 
   getUserNames(username) {

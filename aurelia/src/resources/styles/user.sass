@@ -1,3 +1,25 @@
+@keyframes is-saved
+  0% 
+    background-color : whitesmoke
+  50% 
+    background-color : greenyellow
+  100% 
+    background-color : whitesmoke
+
+@keyframes is-not-saved
+  0% 
+    background-color : whitesmoke
+  50% 
+    background-color : crimson
+  100% 
+    background-color : whitesmoke
+
+.saved
+  animation : is-saved 0.5s ease 0s 2 normal none
+
+.not-saved
+  animation : is-not-saved 0.5s ease 0s 2 normal none
+
 .user-content
   position        : relative
   flex-direction  : column
@@ -68,11 +90,11 @@
           width : auto
           height : 80%
 
-    #add-book:hover
+    #add-book-button:hover
       border           : 1px solid grey
       background-color : lightgrey
 
-    #add-book
+    #add-book-button
       width            : auto
       height           : 100%
       box-sizing       : border-box
@@ -192,6 +214,9 @@
             line-height : 0.85rem
             color       : grey
             text-align  : center
+
+            span
+              font-weight : bolder
 
           .book-options
             display         : flex
@@ -314,7 +339,6 @@
           width            : auto
           height           : 2.5rem
           box-sizing       : border-box
-          border           : 1px solid lightgrey
           padding          : 0rem
           margin           : 0rem 0.5rem
           font-size        : 0.85rem
@@ -357,8 +381,14 @@
             width           : auto
             height          : 100%
             box-sizing      : border-box
+            border-top      : 1px solid lightgrey
+            border-right    : 1px solid lightgrey
+            border-bottom   : 1px solid lightgrey
             padding         : 0rem
             margin          : 0rem
+
+            .accept:hover, .done:hover, .cancel:hover
+              border-left : 1px solid grey
 
             .accept:hover
               background-color : greenyellow

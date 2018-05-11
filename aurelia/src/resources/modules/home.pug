@@ -19,4 +19,4 @@ template
         .book-cover
           img(src="${book.image}")
 
-    book#book(book-selected.bind="bookSelected" state.bind="state" api.bind="api" router.bind="router")
+    book-selected#book-selected(book-selected.bind="bookSelected" state.bind="state" api.bind="api" router.bind="router")

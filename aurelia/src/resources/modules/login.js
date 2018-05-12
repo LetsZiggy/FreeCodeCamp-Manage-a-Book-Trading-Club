@@ -17,8 +17,8 @@ export class Login {
 
   async canActivate(params, routeConfig, navigationInstruction) {
     if(this.state.user.username) {
-      let data = JSON.parse(localStorage.getItem('FreeCodeCamp - Manage a Book Trading Club')) || {};
-      // let logout = await this.api.logoutUser();
+      let data = JSON.parse(localStorage.getItem('freecodecamp-manage-a-book-trading-club')) || {};
+      let logout = await this.api.logoutUser();
 
       if(this.state.user.interval) {
         clearInterval(this.state.user.interval);
@@ -27,13 +27,15 @@ export class Login {
 
       this.state.user.username = null;
       this.state.user.expire = null;
+      this.state.user.location = '';
 
       data.username = this.state.user.username;
       data.userexpire = this.state.user.expire;
-      localStorage.setItem('FreeCodeCamp - Manage a Book Trading Club', JSON.stringify(data));
+      data.userlocation = this.state.user.location;
+      localStorage.setItem('freecodecamp-manage-a-book-trading-club', JSON.stringify(data));
 
       this.state.user.book = null;
-      if(this.router.history.previousLocation === '/home') {
+      if(this.router.history.previousLocation === '/home' && document.getElementById('book')) {
         document.getElementById('book').style.visibility = 'hidden';
         document.getElementById('book').style.pointerEvents = 'none';
       }
@@ -146,9 +148,9 @@ export class Login {
       }
     }
     else {
-      this.state.user.username = result.username;
+      this.state.user.username = document.getElementById(`${form}-username`).value;
       this.state.user.expire = result.expire;
-      // this.state.user.username = document.getElementById(`${form}-username`).value;
+      this.state.user.location = result.location || '';
 
       this.state.user.interval = setTimeout(async () => {
         let logout = await this.api.logoutUser();
@@ -160,6 +162,7 @@ export class Login {
 
         this.state.user.username = null;
         this.state.user.expire = null;
+        this.state.user.location = '';
         console.log('logout');
       }, (this.state.user.expire - Date.now()));
 

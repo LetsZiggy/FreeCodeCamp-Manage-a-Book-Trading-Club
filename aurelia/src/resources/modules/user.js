@@ -20,74 +20,6 @@ export class User {
   }
 
   attached() {
-    if(!this.state.books.length) {
-      this.state.books.push({
-        id: 'test-id-1',
-        title: 'test-book-1',
-        authors: ['test-author-1'],
-        image: 'http://via.placeholder.com/250x350',
-        link: 'https://www.example.com/',
-        ownerList: ['otherUser-1', 'otherUser-2', 'testUser'],
-        owners: [
-          {
-            username: 'otherUser-1',
-            location: 'other-location-1',
-            requests: {}
-          },
-          {
-            username: 'otherUser-2',
-            location: 'other-location-2',
-            requests: {}
-          },
-          {
-            username: 'testUser',
-            location: 'test-location',
-            requests: {
-              'requestUser-1': '1',
-              'requestUser-2': '2'
-            }
-          }
-        ]
-      });
-      this.state.books.push({
-        id: 'test-id-2',
-        title: 'test-book-2',
-        authors: ['test-author-2', 'test-author-3'],
-        image: 'http://via.placeholder.com/450x350',
-        link: 'https://www.example.com/',
-        ownerList: ['testUser', 'otherUser-3'],
-        owners: [
-          {
-            username: 'testUser',
-            location: 'test-location',
-            requests: {
-              'requestUser-1': '1',
-              'requestUser-2': '2'
-            }
-          },
-          {
-            username: 'otherUser-3',
-            location: 'other-location-3',
-            requests: {}
-          }
-        ]
-      });
-      this.state.books.push({
-        id: 'test-id-temp-1',
-        title: 'test-book-temp-1',
-        authors: ['author'],
-        image: 'http://via.placeholder.com/250x300',
-        link: 'https://www.example.com',
-        ownerList: ['otherUser-3'],
-        owners: [
-          {
-            username: 'otherUser-3',
-            location: 'other-location-3',
-            requests: {}
-          }
-        ]
-      });
-    }
     this.initialise();
     this.userLocation = this.state.user.location ? this.state.user.location : '';
   }
@@ -97,11 +29,16 @@ export class User {
 
   async initialise() {
     if(!this.state.books.length) {
-      response = await this.api.getBookshelf();
-      this.state.books = response.bookshelf.map((v, i, a) => {
-        v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
-        return(v);
-      });
+      let response = await this.api.getBookshelf();
+      if(response.get) {
+        this.state.books = response.bookshelf.map((v, i, a) => {
+          v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
+          return(v);
+        });
+      }
+      else {
+        this.state.books = [];
+      }
     }
 
     if(this.state.books.length) {
@@ -126,7 +63,6 @@ export class User {
     let buttonElem = document.getElementById(button);
 
     if(inputElem.value !== '' && inputElem.value !== this.state.user.location) {
-      console.log('inside 1');
       let result = await this.api.setLocation(inputElem.value, this.state.user.username);
 
       if(result.update) {
@@ -139,6 +75,7 @@ export class User {
       }
     }
     else {
+      inputElem.value = this.state.user.location;
       inputElem.focus();
       buttonElem.classList.add('not-saved');
 
@@ -174,37 +111,14 @@ export class User {
   }
 
   async removeBook(book) {
-    // let promiseList = [];
     let bookID = book.id;
     let ownerIndex = book.owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
-
-    // book.requestList.forEach((v, i, a) => {
-      // promiseList.push(this.api.cancelRequest(book, this.state.user.username, v.username));
-      // book.owners[ownerIndex].requests[v.username] = '0';
-      // delete book.owners[ownerIndex].requests[v.username];
-    // });
 
     while(book.requestList.length) {
       book.requestList.pop();
     }
 
     book.ownerList.splice(ownerIndex, 1);
-
-    // Promise.all(promiseList).then(async () => {
-    //   let result = await this.api.removeBook(bookID, this.state.user.username);
-    //   if(result.remove) {
-    //     let bookIndex = null;
-
-    //     bookIndex = this.books.map((v, i, a) => v.id).indexOf(bookID);
-    //     this.books.splice(bookIndex, 1);
-
-    //     bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(bookID);
-    //     this.state.books[bookIndex].owners.splice(ownerIndex, 1);
-    //     if(!this.state.books[bookIndex].owners.length) {
-    //       this.state.books.splice(bookIndex, 1);
-    //     }
-    //   }
-    // });
 
     let result = await this.api.removeBook(bookID, this.state.user.username);
     if(result.remove) {

@@ -16,55 +16,8 @@ export class Home {
   }
 
   attached() {
-    if(!this.state.books.length) {
-      this.state.books.push({
-        id: 'test-id-1',
-        title: 'test-book-1',
-        authors: ['test-author-1'],
-        image: 'http://via.placeholder.com/250x350',
-        link: 'https://www.example.com/',
-        ownerList: ['requestUser-1', 'requestUser-2'],
-        owners: [
-          {
-            username: 'requestUser-1',
-            location: 'test-location-1',
-            requests: {
-              'testUser': '2'
-            }
-          },
-          {
-            username: 'requestUser-2',
-            location: 'test-location-2',
-            requests: {}
-          }
-        ]
-      });
-      this.state.books.push({
-        id: 'test-id-2',
-        title: 'test-book-2',
-        authors: ['test-author-2'],
-        image: 'http://via.placeholder.com/350x350',
-        link: 'https://www.example.com/',
-        ownerList: ['requestUser-3', 'requestUser-4'],
-        owners: [
-          {
-            username: 'requestUser-3',
-            location: 'test-location-3',
-            requests: {}
-          },
-          {
-            username: 'requestUser-4',
-            location: 'test-location-4',
-            requests: {}
-          }
-        ]
-      });
-    }
     this.initialise();
-
-    if(this.state.user.book) {
-      this.showBook(this.state.user.book);
-    }
+    if(this.state.user.book) { this.showBook(this.state.user.book); }
   }
 
   detached() {
@@ -73,18 +26,25 @@ export class Home {
   async initialise() {
     if(!this.state.books.length) {
       let response = await this.api.getBookshelf();
-      this.state.books = response.bookshelf.map((v, i, a) => {
-        v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
-        return(v);
-      });
+      if(response.get) {
+        this.state.books = response.bookshelf.map((v, i, a) => {
+          v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
+          return(v);
+        });
+      }
+      else {
+        this.state.books = [];
+      }
     }
 
     if(this.state.books.length) {
       this.books = this.state.books.map((v, i, a) => v);
     }
 
-    document.getElementById('filter-input').disabled = false;
-    document.getElementById('filter-input').focus();
+    if(document.getElementById('filter-input')) {
+      document.getElementById('filter-input').disabled = false;
+      document.getElementById('filter-input').focus();
+    }
   }
 
   filterChanged(newValue, oldValue) {

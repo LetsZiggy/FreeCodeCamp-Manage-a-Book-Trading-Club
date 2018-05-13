@@ -120,7 +120,7 @@ export class User {
 
     book.ownerList.splice(ownerIndex, 1);
 
-    let result = await this.api.removeBook(bookID, this.state.user.username);
+    let result = await this.api.removeBook({ id: bookID }, this.state.user.username);
     if(result.remove) {
       let bookIndex = null;
 
@@ -142,7 +142,7 @@ export class User {
     let requester = book.requestList[requestIndex].username;
     
     if(type === 'accept') {
-      let result = await this.api.ownerAccept(book.id, this.state.user.username, book.requestList[requestIndex].username);
+      let result = await this.api.requestAccept({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username);
 
       if(result.update) {
         book.elem.children[2].children[requestIndex + 1].dataset.status = '2';
@@ -151,7 +151,7 @@ export class User {
       }
     }
     else if(type === 'done') {
-      let result = await this.api.ownerDone(book.id, this.state.user.username, book.requestList[requestIndex].username);
+      let result = await this.api.requestDone({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username);
 
       if(result.update) {
         let bookID = book.id;
@@ -176,7 +176,7 @@ export class User {
       }
     }
     else {
-      let result = await this.api.ownerCancel(book.id, this.state.user.username, book.requestList[requestIndex].username);
+      let result = await this.api.requestCancel({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username);
       if(result.update) {
         book.elem.children[2].children[requestIndex + 1].dataset.status = '0';
         book.requestList[requestIndex].status = '0';

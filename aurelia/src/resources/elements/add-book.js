@@ -14,13 +14,16 @@ export class AddBook {
 
   closeAddBook() {
     inputVal = null;
+    document.getElementById('add-book-form-input').value = '';
+    while(this.results.length) { this.results.pop(); }
+    this.resultSelected = null
     document.getElementById('add-book').style.visibility = 'hidden';
     document.getElementById('add-book').style.pointerEvents = 'none';
   }
 
   handleKeydown(event) {
     let value = document.getElementById('add-book-form-input').value;
-    let regex = new RegExp('^[-_a-zA-Z0-9 \.]$');
+    let regex = new RegExp('^[-_a-zA-Z0-9 \.\']$');
     let specialKeys = ['Enter', 'Shift', 'Alt', 'Control', 'Backspace', 'Insert', 'Del', 'Delete', 'Home', 'End', 'PageUp', 'PageDown', 'Tab', 'Up', 'ArrowUp', 'Down', 'ArrowDown', 'Left', 'ArrowLeft', 'Right', 'ArrowRight', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
 
     if(event.key === 'Enter' && (!value.length || value === inputVal)) {
@@ -74,9 +77,9 @@ export class AddBook {
     }
   }
 
-  addButtonConfirm() {
+  async addButtonConfirm() {
     let selected = this.results.find((v, i, a) => v.id === this.resultSelected);
-    let result = this.api.addBook(
+    let result = await this.api.addBook(
                    {
                      id: selected.id,
                      title: selected.title,

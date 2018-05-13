@@ -74,122 +74,99 @@ export class ApiInterface {
   }
 
   addBook(book, username, location) {
-    // return(
-    //   this.http.fetch(`/book/add`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, username: username, location: location })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ add: true });
+    return(
+      this.http.fetch(`/book/add`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, username: username, location: location })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
   }
 
   removeBook(book, username) {
-    // return(
-    //   this.http.fetch(`/book/remove`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, username: username })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ remove: true });
+    return(
+      this.http.fetch(`/book/remove`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, username: username })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
   }
 
-  requesterSubmit(book, owner, requester) {
-    // return(
-    //   this.http.fetch(`/request/submit`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ update: true });
+  requestSubmit(book, owner, requester) {
+    return(
+      this.http.fetch(`/request/submit`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
   }
 
-  requesterCancel(book, owner, requester) {
-    // return(
-    //   this.http.fetch(`/request/cancel`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ update: true });
+  requestAccept(book, owner, requester) {
+    return(
+      this.http.fetch(`/request/accept`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
   }
 
-  ownerAccept(book, owner, requester) {
-    // return(
-    //   this.http.fetch(`/request/accept`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ update: true });
+  requestCancel(book, owner, requester) {
+    return(
+      this.http.fetch(`/request/cancel`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
   }
 
-  ownerDone(book, owner, requester) {
-    // return(
-    //   this.http.fetch(`/request/done`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ update: true });
-  }
-
-  ownerCancel(book, owner, requester) {
-    // return(
-    //   this.http.fetch(`/request/cancel`, {
-    //              method: 'POST',
-    //              credentials: 'same-origin',
-    //              headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //              },
-    //              body: JSON.stringify({ book: book, owner: owner, requester: requester })
-    //            })
-    //            .then(response => response.json())
-    //            .then(data => data)
-    // );
-    return({ update: true });
+  requestDone(book, owner, requester) {
+    return(
+      this.http.fetch(`/request/done`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
   }
 
   getUserNames(username) {

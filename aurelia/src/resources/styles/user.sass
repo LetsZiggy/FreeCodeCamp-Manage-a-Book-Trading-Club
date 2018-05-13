@@ -58,7 +58,7 @@
       padding         : 0rem
       margin          : 0rem
 
-      input
+      #location-input
         width      : 15rem
         height     : 100%
         box-sizing : border-box
@@ -66,11 +66,11 @@
         padding    : 0rem 0.125rem
         margin     : 0rem
 
-      div:hover
+      #location-save:hover
         border           : 1px solid grey
         background-color : lightgrey
 
-      div
+      #location-save
         display          : flex
         flex-direction   : row
         flex-wrap        : nowrap
@@ -301,11 +301,13 @@
           font-weight : normal
           line-height : 0.85rem
           color       : black
+          user-select : none
 
           span
             font-size   : 0.85rem
             line-height : 0.85rem
             color       : grey
+            user-select : none
 
         .request[data-status="1"]
           .request-details

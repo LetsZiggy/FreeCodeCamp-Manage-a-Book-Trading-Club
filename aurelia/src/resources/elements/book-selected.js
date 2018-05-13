@@ -39,7 +39,7 @@ export class BookSelected {
     let result = null;
 
     if(owner.elem.dataset.status === '0') {
-      result = await this.api.requesterSubmit(this.bookSelected.id, owner.username, this.state.user.username);
+      result = await this.api.requestSubmit({ id: this.bookSelected.id }, owner.username, this.state.user.username);
       if(result.update) {
         owner.elem.dataset.status = '1';
         this.bookSelected.owners[ownerIndex].requests[this.state.user.username] = '1';
@@ -50,7 +50,7 @@ export class BookSelected {
       }
     }
     else {
-      result = await this.api.requesterCancel(this.bookSelected.id, owner.username, this.state.user.username)
+      result = await this.api.requestCancel({ id: this.bookSelected.id }, owner.username, this.state.user.username)
       if(result.update) {
         owner.elem.dataset.status = '0';
         this.bookSelected.owners[ownerIndex].requests[this.state.user.username] = '0';

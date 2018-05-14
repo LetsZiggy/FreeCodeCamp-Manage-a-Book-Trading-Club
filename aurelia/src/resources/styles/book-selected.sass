@@ -191,24 +191,12 @@
           .tradable[data-status="0"]
             border : 1px solid gainsboro
 
-            .location
-              display : inline-block
-
-            .status
-              display : none
-
           .tradable[data-status="1"]:hover, .tradable[data-status="2"]:hover
             .cancel
               display : flex
 
           .tradable[data-status="1"], .tradable[data-status="2"]
             border : 0px solid rgba(0, 0, 0, 0)
-
-            .location
-              display : none
-
-            .status
-              display : inline-block
 
           .tradable[data-status="1"]
             background-color : greenyellow
@@ -240,12 +228,12 @@
               user-select    : none
 
             .username
-              font-size   : 0.85rem
-              line-height : 0.85rem
-              color       : black
+              font-weight : bolder
+              color       : dimgrey
 
             .location, .status
-              color : grey
+              display : inline-block
+              color   : grey
 
             .cancel
               position         : absolute

@@ -41,22 +41,6 @@ export class ApiInterface {
     );
   }
 
-  setLocation(location, username) {
-    return(
-      this.http.fetch(`/user/location`, {
-                 method: 'POST',
-                 credentials: 'same-origin',
-                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify({ location: location, username: username })
-               })
-               .then(response => response.json())
-               .then(data => data)
-    );
-  }
-
   searchTitle(title) {
     return(
       this.http.fetch(`/book/search`, {
@@ -73,7 +57,7 @@ export class ApiInterface {
     );
   }
 
-  addBook(book, username, location) {
+  addBook(book, username, location, wsID) {
     return(
       this.http.fetch(`/book/add`, {
                  method: 'POST',
@@ -82,14 +66,14 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, username: username, location: location })
+                 body: JSON.stringify({ book: book, username: username, location: locatio, wsID: wsIDn })
                })
                .then(response => response.json())
                .then(data => data)
     );
   }
 
-  removeBook(book, username) {
+  removeBook(book, username, wsID) {
     return(
       this.http.fetch(`/book/remove`, {
                  method: 'POST',
@@ -98,14 +82,14 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, username: username })
+                 body: JSON.stringify({ book: book, username: username, wsID: wsID })
                })
                .then(response => response.json())
                .then(data => data)
     );
   }
 
-  requestSubmit(book, owner, requester) {
+  requestSubmit(book, owner, requester, wsID) {
     return(
       this.http.fetch(`/request/submit`, {
                  method: 'POST',
@@ -114,14 +98,14 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester, wsID: wsID })
                })
                .then(response => response.json())
                .then(data => data)
     );
   }
 
-  requestAccept(book, owner, requester) {
+  requestAccept(book, owner, requester, wsID) {
     return(
       this.http.fetch(`/request/accept`, {
                  method: 'POST',
@@ -130,14 +114,14 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester, wsID: wsID })
                })
                .then(response => response.json())
                .then(data => data)
     );
   }
 
-  requestCancel(book, owner, requester) {
+  requestCancel(book, owner, requester, wsID) {
     return(
       this.http.fetch(`/request/cancel`, {
                  method: 'POST',
@@ -146,14 +130,14 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester, wsID: wsID })
                })
                .then(response => response.json())
                .then(data => data)
     );
   }
 
-  requestDone(book, owner, requester) {
+  requestDone(book, owner, requester, wsID) {
     return(
       this.http.fetch(`/request/done`, {
                  method: 'POST',
@@ -162,7 +146,23 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, owner: owner, requester: requester })
+                 body: JSON.stringify({ book: book, owner: owner, requester: requester, wsID: wsID })
+               })
+               .then(response => response.json())
+               .then(data => data)
+    );
+  }
+
+  setLocation(location, username, wsID) {
+    return(
+      this.http.fetch(`/user/location`, {
+                 method: 'POST',
+                 credentials: 'same-origin',
+                 headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({ location: location, username: username, wsID: wsID })
                })
                .then(response => response.json())
                .then(data => data)
@@ -245,65 +245,5 @@ export class ApiInterface {
                .then(response => response.json())
                .then(data => data)
     );
-  }
-}
-
-function getBookshelf(data) {
-  let books = data.reduce((acc, v, i, a) => {
-    let book = {};
-
-    book.id = v.id;
-    book.title = v.title;
-    book.authors = v.authors;
-    book.image = v.image;
-    book.link = v.link;
-    book.owners = v.owners;
-
-    acc.push(book);
-
-    return(acc);
-  }, []);
-
-  return(books);
-}
-
-function processSearch(data) {
-  let books = [];
-
-  books = data.items.reduce((acc, v, i, a) => {
-    let book = processBook(v);
-
-    if(book !== null) {
-      acc.push(book);
-    }
-
-    return(acc);
-  }, []);
-
-  return(books);
-}
-
-function processBook(data) {
-  if(v.volumeInfo.hasOwnProperty('imageLinks')) {
-    let book = {};
-
-    book.id = v.id || '';
-    book.title = v.volumeInfo.title || '';
-    book.authors = v.volumeInfo.authors || [];
-    book.image = v.volumeInfo.hasOwnProperty('imageLinks') ? v.volumeInfo.imageLinks.thumbnail : '';
-    book.link = v.volumeInfo.infoLink;
-    book.owners = {};
-    /*
-    {
-      ownerUsername: {
-        requesterUsername: stage
-      }
-    }
-    */
-
-    return(book);
-  }
-  else {
-    return(null)
   }
 }

@@ -1,8 +1,10 @@
 import {bindable, bindingMode} from 'aurelia-framework';
+import {handleWebsocket} from '../services/handle-websocket';
 
 let inputVal = null;
 
 export class AddBook {
+  @bindable bookAdded;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) api;
   @bindable({ defaultBindingMode: bindingMode.twoWay }) books;
@@ -49,6 +51,7 @@ export class AddBook {
     let result = await this.api.searchTitle(value);
 
     if(result.search) {
+      while(this.results.length) { this.results.pop(); }
       this.results = result.books.map((v, i, a) => v);
     }
     else {
@@ -92,26 +95,24 @@ export class AddBook {
                  );
     if(result.add) {
       let bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(selected.id);
-      let book = {
-        id: selected.id,
-        title: selected.title,
-        authors: selected.authors,
-        image: selected.image,
-        link: selected.link,
-        ownerList: [this.state.user.username],
-        requestList: [],
-        owners: [
-          {
-            username: this.state.user.username,
-            location: this.state.user.location,
-            requests: {}
-          }
-        ]
-      };
 
       if(bookIndex === -1) {
-        this.state.books.push(book);
-        this.books.push(book);
+        this.state.books.push({
+          id: selected.id,
+          title: selected.title,
+          authors: selected.authors,
+          image: selected.image,
+          link: selected.link,
+          ownerList: [this.state.user.username],
+          requestList: [],
+          owners: [
+            {
+              username: this.state.user.username,
+              location: this.state.user.location,
+              requests: {}
+            }
+          ]
+        });
       }
       else {
         this.state.books[bookIndex].owners.push({
@@ -121,9 +122,9 @@ export class AddBook {
         });
         this.state.books[bookIndex].ownerList.push(this.state.user.username);
         this.state.books[bookIndex].requestList = [];
-        this.books.push(this.state.books[bookIndex]);
       }
 
+      this.bookAdded();
       this.closeAddBook();
     }
     else {

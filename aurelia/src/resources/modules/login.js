@@ -1,7 +1,8 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
 import {Router, Redirect} from 'aurelia-router';
-import {state} from '../services/state';
 import {ApiInterface} from '../services/api-interface';
+import {handleWebsocket} from '../services/handle-websocket';
+import {state} from '../services/state';
 
 @inject(Router, ApiInterface)
 export class Login {
@@ -23,6 +24,10 @@ export class Login {
       if(this.state.user.interval) {
         clearInterval(this.state.user.interval);
         this.state.user.interval = null;
+      }
+
+      if(this.state.webSocketID) {
+        this.state.webSocket.send(JSON.stringify({ type: 'logout' }));
       }
 
       this.state.user.username = null;
@@ -49,6 +54,11 @@ export class Login {
       this.radio = 'radio-signin';
       document.getElementById('radio-delay').checked = true;
       setTimerInterval(this.state, this.radio, 'signin');
+    }
+
+    this.state.webSocket.onmessage = (event) => {
+      let message = JSON.parse(event.data);
+      handleWebsocket(message, this.state);
     }
   }
 
@@ -165,6 +175,10 @@ export class Login {
         this.state.user.location = '';
         console.log('logout');
       }, (this.state.user.expire - Date.now()));
+
+      if(this.state.webSocketID) {
+        this.state.webSocket.send(JSON.stringify({ type: 'login', username: this.state.user.username }));
+      }
 
       this.router.navigateToRoute('home');
     }

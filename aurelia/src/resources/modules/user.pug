@@ -42,4 +42,4 @@ template
               span.done(click.delegate="handleRequest('done', $index, book)") Done
               span.cancel(click.delegate="handleRequest('cancel', $index, book)") Cancel
 
-    add-book#add-book(state.bind="state" api.bind="api" books.bind="books")
+    add-book#add-book(book-added.call="initialise()" state.bind="state" api.bind="api" books.bind="books")

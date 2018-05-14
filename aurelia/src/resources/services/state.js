@@ -12,6 +12,8 @@ export const state = {
     location: '',
     book: null
   },
+  webSocketID: null,
   webSocket: null,
+  toUpdate: null,
   books: []
 };

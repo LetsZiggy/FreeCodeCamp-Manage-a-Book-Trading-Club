@@ -36,6 +36,10 @@ export class App {
           this.state.user.interval = null;
         }
 
+        if(this.state.webSocketID) {
+          this.state.webSocket.send(JSON.stringify({ type: 'logout' }));
+        }
+
         this.state.user.username = null;
         this.state.user.expire = null;
         this.state.user.location = '';
@@ -61,6 +65,18 @@ export class App {
         this.state.user.interval = null;
       }
 
+      if(this.state.toUpdate) {
+        clearInterval(this.state.toUpdate);
+        this.state.toUpdate = null;
+      }
+
+      if(this.state.webSocket) {
+        this.state.webSocket.close();
+        this.state.webSocketID = null;
+        this.state.webSocket = null;
+        console.log('close');
+      }
+
       if(this.state.user.username) {
         let store = JSON.parse(localStorage.getItem('freecodecamp-manage-a-book-trading-club')) || {};
         let data = { username: this.state.user.username, userexpire: this.state.user.expire, userlocation: this.state.user.location };
@@ -70,9 +86,9 @@ export class App {
       return;
     };
 
-    // if(!this.state.webSocket) {
-    //   this.setWebsocket();
-    // }
+    if(!this.state.webSocket) {
+      this.setWebsocket();
+    }
   }
 
   setWebsocket() {
@@ -84,21 +100,15 @@ export class App {
     };
 
     this.state.webSocket.onclose = (event) => {
+      this.state.webSocketID = null;
       this.state.webSocket = null;
       console.log('close');
     };
 
     this.state.webSocket.onerror = (event) => {
+      this.state.webSocketID = null;
       this.state.webSocket = null;
       console.log('error');
-    };
-
-    this.state.webSocket.onmessage = (event) => {
-      let message = JSON.parse(event.data);
-
-      if(message.type === 'add') {}
-
-      if(message.type === 'remove') {}
     };
   }
 

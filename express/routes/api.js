@@ -4,7 +4,7 @@ const router = express.Router();
 const mongo = require('mongodb').MongoClient;
 const createID = require('./services/create-id.js');
 const handleHashing = require('./services/handle-hashing.js');
-// const {} = require('../ws.js');
+const {setLocation, addBook, removeBook, requestSubmit, requestCancel, requestAccept, requestDone} = require('../ws.js');
 
 const dbURL = `mongodb://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBURL}/${process.env.DBNAME}`;
 const google = `https://www.googleapis.com/books/v1/volumes?maxResults=20&orderBy=relevance&q=`;
@@ -39,6 +39,7 @@ router.post('/user/location', async (req, res, next) => {
     let updateMany = await collectionBooks.updateMany({ id: { $in: bookIDs }, 'owners.username': req.body.username }, { $set: { 'owners.$.location': req.body.location } });
     client.close();
 
+    setLocation(req.body.wsID, { username: req.body.username, location: req.body.location });
     res.json({ update: true });
   }
   else {
@@ -111,7 +112,22 @@ router.post('/book/add', async (req, res, next) => {
     }
 
     client.close();
+    let book = {};
 
+    if(currentBook) {
+      book.id = req.body.book.id;
+      book.owner = [{ username: req.body.username, location: req.body.location, requests: {} }];
+    }
+    else {
+      book.id = req.body.book.id;
+      book.title = req.body.book.title;
+      book.authors = req.body.book.authors;
+      book.image = req.body.book.image;
+      book.link = req.body.book.link;
+      book.owners = [{ username: req.body.username, location: req.body.location, requests: {} }];
+    }
+
+    addBook(req.body.wsID, book);
     res.json({ add: true });
   }
   else {
@@ -259,7 +275,7 @@ router.post('/request/done', async (req, res, next) => {
     let bulkUpdateBook = await collectionBooks.bulkWrite(operations, { ordered: false });
     client.close();
 
-    res.json({ update: true });
+    res.json({ update: true, location: findOne.location });
   }
   else {
     res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });

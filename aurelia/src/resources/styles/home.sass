@@ -44,7 +44,7 @@
         padding    : 0rem 0.125rem
         margin     : 0rem
 
-    #owner
+    #legends
       position        : relative
       display         : flex
       flex-direction  : row
@@ -58,58 +58,43 @@
       margin          : 0rem 0rem 0rem auto
       padding         : 0rem
 
-      .colour
-        width            : 0.75rem
-        height           : 0.75rem
-        margin           : 0rem 0.125rem
-        padding          : 0rem
-        border-radius    : 50%
-        background-color : seagreen
+      #owner, #request
+        position        : relative
+        display         : flex
+        flex-direction  : row
+        flex-wrap       : nowrap
+        justify-content : center
+        align-items     : center
+        align-content   : center
+        width           : auto
+        height          : 100%
+        box-sizing      : border-box
+        padding         : 0rem
 
-      .text
-        margin-left : 0.25rem
-        font-size   : 0.85rem
-        line-height : 0.85rem
-        color       : grey
+        .colour
+          width            : 0.75rem
+          height           : 0.75rem
+          margin           : 0rem 0.125rem
+          padding          : 0rem
+          border-radius    : 50%
 
-    // #owner, #requested, #offering
-    //   position        : relative
-    //   display         : flex
-    //   flex-direction  : row
-    //   flex-wrap       : nowrap
-    //   justify-content : center
-    //   align-items     : center
-    //   align-content   : center
-    //   width           : auto
-    //   height          : 100%
-    //   box-sizing      : border-box
-    //   margin          : 0rem 0.25rem
-    //   padding         : 0rem
+        .text
+          margin-left : 0.25rem
+          font-size   : 0.85rem
+          line-height : 0.85rem
+          color       : grey
 
-    //   .colour
-    //     width         : 0.75rem
-    //     height        : 0.75rem
-    //     margin        : 0rem 0.125rem
-    //     padding       : 0rem
-    //     border-radius : 50%
+      #request
+        margin : 0rem 0.25rem 0rem 0rem
 
-    //   .text
-    //     margin-left : 0.25rem
-    //     font-size   : 0.85rem
-    //     line-height : 0.85rem
-    //     color       : grey
+        .colour
+          background-color : lightskyblue
 
-    // #owner
-    //   .colour
-    //     background-color : seagreen
+      #owner
+        margin : 0rem 0rem 0rem 0.25rem
 
-    // #requested
-    //   .colour
-    //     background-color : steelblue
-
-    // #offering
-    //   .colour
-    //     background-color : coral
+        .colour
+          background-color : greenyellow
 
   #books-row-empty
     position        : relative
@@ -177,6 +162,16 @@
         padding         : 0rem
         margin          : 0rem
 
+        .book-request
+          display          : inline-block
+          width            : 0.75rem
+          height           : 0.75rem
+          padding          : 0rem
+          margin           : 0rem
+          box-sizing       : border-box
+          border-radius    : 50%
+          background-color : lightskyblue
+
         .book-owner
           display          : inline-block
           width            : 0.75rem
@@ -185,25 +180,7 @@
           margin           : 0rem
           box-sizing       : border-box
           border-radius    : 50%
-          background-color : seagreen
-
-        // .book-owner, .book-requested, .book-offered
-        //   display       : inline-block
-        //   width         : 0.75rem
-        //   height        : 0.75rem
-        //   padding       : 0rem
-        //   margin        : 0rem 0.25rem
-        //   box-sizing    : border-box
-        //   border-radius : 50%
-
-        // .book-owner
-        //   background-color : seagreen
-
-        // .book-requested
-        //   background-color : steelblue
-
-        // .book-offered
-        //   background-color : coral
+          background-color : greenyellow
 
       .book-cover
         display          : flex

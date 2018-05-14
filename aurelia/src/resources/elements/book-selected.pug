@@ -5,23 +5,23 @@ template
 
   #book-selected-container
     #book-selected-image
-      img(src.bind="bookSelected.image")
+      img(src.bind="state.user.book.image")
 
     #book-selected-details
       #book-selected-detail-info
-        a#book-selected-detail-title(href="${bookSelected.link}" target="_blank")
-          | ${bookSelected.title}
+        a#book-selected-detail-title(href="${state.user.book.link}" target="_blank")
+          | ${state.user.book.title}
           img(src="https://material.io/tools/icons/static/icons/baseline-launch-24px.svg")
-        #book-selected-detail-authors Author${bookSelected.authors.length === 1 ? '' : 's'}: ${bookSelected.authors | authors}
+        #book-selected-detail-authors Author${state.user.book.authors.length === 1 ? '' : 's'}: ${state.user.book.authors | authors}
       #book-selected-detail-options
-        #book-selected-detail-notlogin(if.bind="bookSelected.showList.detailNotLogin" click.delegate="bookToLogin()") Login to trade
-        #book-selected-detail-isowner(if.bind="bookSelected.showList.detailIsOwner") You have this book
-        #book-selected-detail-tradable-list(if.bind="bookSelected.showList.detailTradableList")
+        #book-selected-detail-notlogin(if.bind="state.user.book.showList.detailNotLogin" click.delegate="bookToLogin()") Login to trade
+        #book-selected-detail-isowner(if.bind="state.user.book.showList.detailIsOwner") You have this book
+        #book-selected-detail-tradable-list(if.bind="state.user.book.showList.detailTradableList")
           .title Request trade with:
-          .tradable(repeat.for="owner of bookSelected.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="handleRequest($index, owner)")
+          .tradable(repeat.for="owner of state.user.book.owners" ref="owner.elem" data-status="${state.user.username ? owner.requests[state.user.username] : '0'}" click.delegate="handleRequest($index, owner)")
             span.username ${owner.username}
             span.location ${owner.location}
-            span.status ${owner.requests[state.user.username] === '1' ? 'Request sent' : 'Request accepted'}
+            span.status ${owner.requests[state.user.username] === '0' ? 'Book available' : owner.requests[state.user.username] === '1' ? 'Request sent' : 'Request accepted'}
             span.cancel Cancel Request
 
   #book-selected-request-error

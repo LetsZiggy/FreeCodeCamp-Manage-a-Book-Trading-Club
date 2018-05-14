@@ -1,6 +1,7 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
 import {Redirect} from 'aurelia-router';
 import {ApiInterface} from '../services/api-interface';
+import {handleWebsocket} from '../services/handle-websocket';
 import {state} from '../services/state';
 
 @inject(ApiInterface)
@@ -22,13 +23,26 @@ export class User {
   attached() {
     this.initialise();
     this.userLocation = this.state.user.location ? this.state.user.location : '';
+    this.state.webSocket.onmessage = (event) => {
+      let message = JSON.parse(event.data);
+      handleWebsocket(message, this.state);
+
+      if(message.type !== 'id') {
+        this.initialise();
+      }
+    };
   }
 
   detached() {
   }
 
-  async initialise() {
-    if(!this.state.books.length) {
+  async initialise(reset=false) {
+    if(!this.state.books.length || reset) {
+      // if(this.state.toUpdate) {
+      //   clearInterval(this.state.toUpdate);
+      //   this.state.toUpdate = null;
+      // }
+
       let response = await this.api.getBookshelf();
       if(response.get) {
         this.state.books = response.bookshelf.map((v, i, a) => {
@@ -41,7 +55,14 @@ export class User {
       }
     }
 
+    if(!this.state.toUpdate) {
+      this.state.toUpdate = setInterval(async () => {
+        this.initialise(true);
+      }, 600000);
+    }
+
     if(this.state.books.length) {
+      while(this.books.length) { this.books.pop(); }
       this.books = this.state.books.reduce((acc, v, i, a) => {
         let ownerIndex = v.ownerList.indexOf(this.state.user.username);
         if(ownerIndex !== -1) {
@@ -63,7 +84,7 @@ export class User {
     let buttonElem = document.getElementById(button);
 
     if(inputElem.value !== '' && inputElem.value !== this.state.user.location) {
-      let result = await this.api.setLocation(inputElem.value, this.state.user.username);
+      let result = await this.api.setLocation(inputElem.value, this.state.user.username, this.state.webSocketID);
 
       if(result.update) {
         this.state.user.location = inputElem.value;
@@ -72,6 +93,16 @@ export class User {
         setTimeout(() => {
           buttonElem.classList.remove('saved');
         }, 1000);
+
+        this.state.books.forEach((v, i, a) => {
+          let ownerIndex = v.owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
+
+          if(ownerIndex !== -1) {
+            v.owners[ownerIndex].location = inputElem.value;
+          }
+        });
+
+        this.initialise();
       }
     }
     else {
@@ -120,7 +151,7 @@ export class User {
 
     book.ownerList.splice(ownerIndex, 1);
 
-    let result = await this.api.removeBook({ id: bookID }, this.state.user.username);
+    let result = await this.api.removeBook({ id: bookID }, this.state.user.username, this.state.webSocketID);
     if(result.remove) {
       let bookIndex = null;
 
@@ -142,7 +173,7 @@ export class User {
     let requester = book.requestList[requestIndex].username;
     
     if(type === 'accept') {
-      let result = await this.api.requestAccept({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username);
+      let result = await this.api.requestAccept({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username, this.state.webSocketID);
 
       if(result.update) {
         book.elem.children[2].children[requestIndex + 1].dataset.status = '2';
@@ -151,12 +182,12 @@ export class User {
       }
     }
     else if(type === 'done') {
-      let result = await this.api.requestDone({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username);
+      let result = await this.api.requestDone({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username, this.state.webSocketID);
 
       if(result.update) {
         let bookID = book.id;
 
-        book.owners.push({ username: requester, location: '', requests: {} });
+        book.owners.push({ username: requester, location: result.location, requests: {} });
 
         book.requestList.forEach((v, i, a) => {
           delete book.owners[ownerIndex].requests[v.username];
@@ -176,7 +207,7 @@ export class User {
       }
     }
     else {
-      let result = await this.api.requestCancel({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username);
+      let result = await this.api.requestCancel({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username, this.state.webSocketID);
       if(result.update) {
         book.elem.children[2].children[requestIndex + 1].dataset.status = '0';
         book.requestList[requestIndex].status = '0';

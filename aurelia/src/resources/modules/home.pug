@@ -3,9 +3,13 @@ template
     #options-row
       #filter
         input#filter-input(type="text" placeholder="Filter Books" value.bind="filter" disabled)
-      #owner
-        .colour
-        .text You have this
+      #legends
+        #request
+          .colour
+          .text You requested this
+        #owner
+          .colour
+          .text You have this
 
     #books-row-empty(if.bind="!books.length")
       | No books
@@ -15,8 +19,9 @@ template
     #books-row(if.bind="books.length")
       .book(repeat.for="book of books" click.delegate="showBook(book)")
         .book-status
+          span.book-request(if.bind="book.submitList.includes(true)")
           span.book-owner(if.bind="book.ownerList.includes(state.user.username)")
         .book-cover
           img(src="${book.image}")
 
-    book-selected#book-selected(book-selected.bind="bookSelected" state.bind="state" api.bind="api" router.bind="router")
+    book-selected#book-selected(book-requested.call="initialise()" book-selected.bind="bookSelected" state.bind="state" api.bind="api" router.bind="router")

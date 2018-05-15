@@ -1,15 +1,17 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
 import {Redirect} from 'aurelia-router';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {ApiInterface} from '../services/api-interface';
-import {handleWebsocket} from '../services/handle-websocket';
 import {state} from '../services/state';
 
-@inject(ApiInterface)
+@inject(EventAggregator, ApiInterface)
 export class User {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state = state;
 
-  constructor(ApiInterface) {
+  constructor(EventAggregator, ApiInterface) {
+    this.ea = EventAggregator;
     this.api = ApiInterface;
+    this.eaSubscription = null;
     this.userLocation = null;
     this.books = [];
   }
@@ -23,17 +25,11 @@ export class User {
   attached() {
     this.initialise();
     this.userLocation = this.state.user.location ? this.state.user.location : '';
-    this.state.webSocket.onmessage = (event) => {
-      let message = JSON.parse(event.data);
-      handleWebsocket(message, this.state);
-
-      if(message.type !== 'id') {
-        this.initialise();
-      }
-    };
+    this.eaSubscription = this.ea.subscribe('ws', () => { this.initialise(); });
   }
 
   detached() {
+    this.eaSubscription.dispose();
   }
 
   async initialise(reset=false) {
@@ -46,6 +42,7 @@ export class User {
       let response = await this.api.getBookshelf();
       if(response.get) {
         this.state.books = response.bookshelf.map((v, i, a) => {
+          v.submitList = v.owners.map((mv, mi, ma) => mv.requests.hasOwnProperty(this.state.user.username)) || [];
           v.ownerList = v.owners.map((mv, mi, ma) => mv.username) || [];
           return(v);
         });
@@ -145,23 +142,20 @@ export class User {
     let bookID = book.id;
     let ownerIndex = book.owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
 
-    while(book.requestList.length) {
-      book.requestList.pop();
-    }
-
-    book.ownerList.splice(ownerIndex, 1);
-
     let result = await this.api.removeBook({ id: bookID }, this.state.user.username, this.state.webSocketID);
     if(result.remove) {
-      let bookIndex = null;
+      let bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(bookID);
 
-      bookIndex = this.books.map((v, i, a) => v.id).indexOf(bookID);
-      this.books.splice(bookIndex, 1);
-
-      bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(bookID);
-      this.state.books[bookIndex].owners.splice(ownerIndex, 1);
-      if(!this.state.books[bookIndex].owners.length) {
+      if(this.state.books[bookIndex].owners.length === 1) {
         this.state.books.splice(bookIndex, 1);
+        bookIndex = this.books.map((v, i, a) => v.id).indexOf(bookID);
+        this.books.splice(bookIndex, 1);
+      }
+      else {
+        this.state.books[bookIndex].ownerList.splice(ownerIndex, 1);
+        this.state.books[bookIndex].owners.splice(ownerIndex, 1);
+        bookIndex = this.books.map((v, i, a) => v.id).indexOf(bookID);
+        this.books.splice(bookIndex, 1);
       }
     }
 
@@ -189,32 +183,24 @@ export class User {
 
         book.owners.push({ username: requester, location: result.location, requests: {} });
 
-        book.requestList.forEach((v, i, a) => {
-          delete book.owners[ownerIndex].requests[v.username];
-        });
-
-        while(book.requestList.length) {
-          book.requestList.pop();
-        }
-
-        let bookIndex = null;
-
-        bookIndex = this.books.map((v, i, a) => v.id).indexOf(bookID);
-        this.books.splice(bookIndex, 1);
-
-        bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(bookID);
+        while(book.requestList.length) { book.requestList.pop(); }
+        let bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(bookID);
+        this.state.books[bookIndex].ownerList.splice(ownerIndex, 1);
         this.state.books[bookIndex].owners.splice(ownerIndex, 1);
+
+        this.initialise();
       }
     }
     else {
       let result = await this.api.requestCancel({ id: book.id }, this.state.user.username, book.requestList[requestIndex].username, this.state.webSocketID);
-      if(result.update) {
-        book.elem.children[2].children[requestIndex + 1].dataset.status = '0';
-        book.requestList[requestIndex].status = '0';
-        book.owners[ownerIndex].requests[requester] = '0';
 
+      if(result.update) {
         book.requestList.splice(requestIndex, 1);
         delete book.owners[ownerIndex].requests[requester];
+
+        if(!book.requestList.length) {
+          this.showRequests(book);
+        }
       }
     }
 

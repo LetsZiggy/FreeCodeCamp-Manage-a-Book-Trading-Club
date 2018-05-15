@@ -1,17 +1,19 @@
 import {inject, bindable, bindingMode, observable} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {ApiInterface} from '../services/api-interface';
-import {handleWebsocket} from '../services/handle-websocket';
 import {state} from '../services/state';
 
-@inject(Router, ApiInterface)
+@inject(Router, EventAggregator, ApiInterface)
 export class Home {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state = state;
   @observable filter = '';
 
-  constructor(Router, ApiInterface) {
+  constructor(Router, EventAggregator, ApiInterface) {
     this.router = Router;
+    this.ea = EventAggregator;
     this.api = ApiInterface;
+    this.eaSubscription = null;
     this.books = [];
     this.bookSelected = null;
   }
@@ -19,17 +21,11 @@ export class Home {
   attached() {
     this.initialise();
     if(this.state.user.book) { this.showBook(this.state.user.book); }
-    this.state.webSocket.onmessage = (event) => {
-      let message = JSON.parse(event.data);
-      handleWebsocket(message, this.state);
-
-      if(message.type !== 'id') {
-        this.initialise();
-      }
-    };
+    this.eaSubscription = this.ea.subscribe('ws', () => { this.initialise(); });
   }
 
   detached() {
+    this.eaSubscription.dispose();
   }
 
   async initialise(reset=false) {

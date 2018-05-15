@@ -1,12 +1,15 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {ApiInterface} from './resources/services/api-interface';
+import {handleWebsocket} from './resources/services/handle-websocket';
 import {state} from './resources/services/state';
 
-@inject(ApiInterface)
+@inject(EventAggregator, ApiInterface)
 export class App {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) state = state;
 
-  constructor(ApiInterface) {
+  constructor(EventAggregator, ApiInterface) {
+    this.ea = EventAggregator;
     this.api = ApiInterface;
   }
 
@@ -23,6 +26,10 @@ export class App {
       data.userexpire = this.state.user.expire;
       data.userlocation = this.state.user.location;
       localStorage.setItem('freecodecamp-manage-a-book-trading-club', JSON.stringify(data));
+    }
+
+    if(!this.state.webSocket) {
+      this.setWebsocket();
     }
   }
 
@@ -85,10 +92,6 @@ export class App {
 
       return;
     };
-
-    if(!this.state.webSocket) {
-      this.setWebsocket();
-    }
   }
 
   setWebsocket() {
@@ -109,6 +112,15 @@ export class App {
       this.state.webSocketID = null;
       this.state.webSocket = null;
       console.log('error');
+    };
+
+    this.state.webSocket.onmessage = (event) => {
+      let message = JSON.parse(event.data);
+      handleWebsocket(message, this.state);
+
+      if(message.type !== 'id') {
+        this.ea.publish('ws');
+      }
     };
   }
 

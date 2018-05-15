@@ -34,6 +34,13 @@ export function handleWebsocket(message, state) {
   }
 }
 
+function handleTypeID(data, state) {
+  state.webSocketID = data;
+  if(state.user.username) {
+    state.webSocket.send(JSON.stringify({ type: 'login', username: state.user.username }));
+  }
+}
+
 function handleTypeSetLocation(data, state) {
   state.books.forEach((v, i, a) => {
     let ownerIndex = v.owners.map((mv, mi, ma) => mv.username).indexOf(data.username);
@@ -42,13 +49,6 @@ function handleTypeSetLocation(data, state) {
       v.owners[ownerIndex].location = data.location;
     }
   });
-}
-
-function handleTypeID(data, state) {
-  state.webSocketID = data;
-  if(state.user.username) {
-    state.webSocket.send(JSON.stringify({ type: 'login', username: state.user.username }));
-  }
 }
 
 function handleTypeAddBook(data, state) {
@@ -71,12 +71,13 @@ function handleTypeRemoveBook(data, state) {
   let ownerIndex = state.books[bookIndex].owners.map((v, i, a) => v.username).indexOf(data.username);
 
   if(state.books[bookIndex].owners.length === 1) {
-    state.books.splice(bookIndex, 1);
     if(state.user.book && state.user.book.id === data.book) {
       state.user.book = null;
       document.getElementById('book-selected').style.visibility = 'hidden';
       document.getElementById('book-selected').style.pointerEvents = 'none';
     }
+
+    state.books.splice(bookIndex, 1);
   }
   else {
     state.books[bookIndex].owners.splice(ownerIndex, 1);
@@ -101,7 +102,8 @@ function handleTypeRequestCancel(data, state) {
   let ownerIndex = state.books[bookIndex].owners.map((v, i, a) => v.username).indexOf(data.owner);
 
   if(state.books[bookIndex].owners[ownerIndex].requests.hasOwnProperty(data.requester)) { 
-    delete state.books[bookIndex].owners[ownerIndex].requests[data.requester];
+    state.user.book.owners[ownerIndex].requests[data.requester] = '0';
+    state.user.book.submitList[ownerIndex] = false;
   }
 }
 

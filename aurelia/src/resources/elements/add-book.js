@@ -1,5 +1,4 @@
 import {bindable, bindingMode} from 'aurelia-framework';
-import {handleWebsocket} from '../services/handle-websocket';
 
 let inputVal = null;
 
@@ -82,54 +81,64 @@ export class AddBook {
 
   async addButtonConfirm() {
     let selected = this.results.find((v, i, a) => v.id === this.resultSelected);
-    let result = await this.api.addBook(
-                   {
-                     id: selected.id,
-                     title: selected.title,
-                     authors: selected.authors,
-                     image: selected.image,
-                     link: selected.link
-                   },
-                   this.state.user.username,
-                   this.state.user.location
-                 );
-    if(result.add) {
-      let bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(selected.id);
+    let bookIndex = this.state.books.map((v, i, a) => v.id).indexOf(selected.id);
+    let ownerIndex = -1;
+    if(bookIndex !== -1) {
+      ownerIndex = this.state.books[bookIndex].owners.map((mv, mi, ma) => mv.username).indexOf(this.state.user.username);
+    }
 
-      if(bookIndex === -1) {
-        this.state.books.push({
-          id: selected.id,
-          title: selected.title,
-          authors: selected.authors,
-          image: selected.image,
-          link: selected.link,
-          ownerList: [this.state.user.username],
-          requestList: [],
-          owners: [
-            {
-              username: this.state.user.username,
-              location: this.state.user.location,
-              requests: {}
-            }
-          ]
-        });
+    if(ownerIndex === -1) {
+      let result = await this.api.addBook(
+                     {
+                       id: selected.id,
+                       title: selected.title,
+                       authors: selected.authors,
+                       image: selected.image,
+                       link: selected.link
+                     },
+                     this.state.user.username,
+                     this.state.user.location,
+                     this.state.webSocketID
+                   );
+      if(result.add) {
+        if(bookIndex === -1) {
+          this.state.books.push({
+            id: selected.id,
+            title: selected.title,
+            authors: selected.authors,
+            image: selected.image,
+            link: selected.link,
+            ownerList: [this.state.user.username],
+            requestList: [],
+            owners: [
+              {
+                username: this.state.user.username,
+                location: this.state.user.location,
+                requests: {}
+              }
+            ]
+          });
+        }
+        else {
+          this.state.books[bookIndex].owners.push({
+            username: this.state.user.username,
+            location: this.state.user.location,
+            requests: {}
+          });
+          this.state.books[bookIndex].ownerList.push(this.state.user.username);
+          this.state.books[bookIndex].requestList = [];
+        }
+
+        this.bookAdded();
+        this.closeAddBook();
       }
       else {
-        this.state.books[bookIndex].owners.push({
-          username: this.state.user.username,
-          location: this.state.user.location,
-          requests: {}
-        });
-        this.state.books[bookIndex].ownerList.push(this.state.user.username);
-        this.state.books[bookIndex].requestList = [];
+        document.getElementById('add-book-request-error').style.display = 'block';
+        setTimeout(() => { document.getElementById('add-book-request-error').style.display = 'none'; }, 3000);
       }
-
-      this.bookAdded();
-      this.closeAddBook();
     }
     else {
-      document.getElementById('add-book-request-error').style.display = 'block';
-      setTimeout(() => { document.getElementById('add-book-request-error').style.display = 'none'; }, 3000);
+      this.closeAddBook();
     }
   }
 }

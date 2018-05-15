@@ -4,7 +4,7 @@ const router = express.Router();
 const mongo = require('mongodb').MongoClient;
 const createID = require('./services/create-id.js');
 const handleHashing = require('./services/handle-hashing.js');
-const {setLocation, addBook, removeBook, requestSubmit, requestCancel, requestAccept, requestDone} = require('../ws.js');
+const {wsSetLocation, wsAddBook, wsRemoveBook, wsRequestSubmit, wsRequestCancel, wsRequestAccept, wsRequestDone} = require('../ws.js');
 
 const dbURL = `mongodb://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBURL}/${process.env.DBNAME}`;
 const google = `https://www.googleapis.com/books/v1/volumes?maxResults=20&orderBy=relevance&q=`;
@@ -39,7 +39,7 @@ router.post('/user/location', async (req, res, next) => {
     let updateMany = await collectionBooks.updateMany({ id: { $in: bookIDs }, 'owners.username': req.body.username }, { $set: { 'owners.$.location': req.body.location } });
     client.close();
 
-    setLocation(req.body.wsID, { username: req.body.username, location: req.body.location });
+    wsSetLocation(req.body.wsID, { username: req.body.username, location: req.body.location });
     res.json({ update: true });
   }
   else {
@@ -127,7 +127,7 @@ router.post('/book/add', async (req, res, next) => {
       book.owners = [{ username: req.body.username, location: req.body.location, requests: {} }];
     }
 
-    addBook(req.body.wsID, book);
+    wsAddBook(req.body.wsID, book);
     res.json({ add: true });
   }
   else {
@@ -165,6 +165,7 @@ router.post('/book/remove', async (req, res, next) => {
 
     client.close();
 
+    wsRemoveBook(req.body.wsID, { book: req.body.book.id, username: req.body.username });
     res.json({ remove: true });
   }
   else {
@@ -183,12 +184,13 @@ router.post('/request/submit', async (req, res, next) => {
     let updateOne = await collectionBooks.updateOne({ id: req.body.book.id, 'owners.username': req.body.owner }, { $set: { [query]: '1' } });
     client.close();
 
+    wsRequestSubmit(req.body.wsID, { book: req.body.book.id, owner: req.body.owner, requester: req.body.requester });
     res.json({ update: true });
   }
   else {
     res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
     // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
-    res.json({ remove: false });
+    res.json({ update: false });
   }
 });
 
@@ -201,12 +203,13 @@ router.post('/request/accept', async (req, res, next) => {
     let updateOne = await collectionBooks.updateOne({ id: req.body.book.id, 'owners.username': req.body.owner }, { $set: { [query]: '2' } });
     client.close();
 
+    wsRequestAccept(req.body.wsID, { book: req.body.book.id, owner: req.body.owner, requester: req.body.requester });
     res.json({ update: true });
   }
   else {
     res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
     // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
-    res.json({ remove: false });
+    res.json({ update: false });
   }
 });
 
@@ -219,12 +222,13 @@ router.post('/request/cancel', async (req, res, next) => {
     let updateOne = await collectionBooks.updateOne({ id: req.body.book.id, 'owners.username': req.body.owner }, { $unset: { [query]: '' } });
     client.close();
 
+    wsRequestCancel(req.body.wsID, { book: req.body.book.id, owner: req.body.owner, requester: req.body.requester });
     res.json({ update: true });
   }
   else {
     res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
     // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
-    res.json({ remove: false });
+    res.json({ update: false });
   }
 });
 
@@ -275,12 +279,13 @@ router.post('/request/done', async (req, res, next) => {
     let bulkUpdateBook = await collectionBooks.bulkWrite(operations, { ordered: false });
     client.close();
 
+    wsRequestDone(req.body.wsID, { book: req.body.book.id, owner: req.body.owner, requester: req.body.requester, location: findOne.location });
     res.json({ update: true, location: findOne.location });
   }
   else {
     res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
     // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
-    res.json({ remove: false });
+    res.json({ update: false });
   }
 });
 

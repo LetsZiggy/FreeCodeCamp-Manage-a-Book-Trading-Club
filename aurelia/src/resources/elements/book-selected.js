@@ -1,5 +1,4 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
-import {handleWebsocket} from '../services/handle-websocket';
 
 export class BookSelected {
   @bindable bookRequested;

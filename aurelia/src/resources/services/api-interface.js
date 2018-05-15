@@ -66,7 +66,7 @@ export class ApiInterface {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                  },
-                 body: JSON.stringify({ book: book, username: username, location: locatio, wsID: wsIDn })
+                 body: JSON.stringify({ book: book, username: username, location: location, wsID: wsID })
                })
                .then(response => response.json())
                .then(data => data)

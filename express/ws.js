@@ -42,10 +42,10 @@ function webSocketInitialise(server) {
   }, 30000);
 }
 
-function setLocation(id, data) {
+function wsSetLocation(id, data) {
   wss.clients.forEach((client) => {
     if(client.id !== id) {
-      ws.send(JSON.stringify({
+      client.send(JSON.stringify({
         type: 'setLocation',
         data: data
         // {
@@ -57,10 +57,10 @@ function setLocation(id, data) {
   });
 }
 
-function addBook(id, data) {
+function wsAddBook(id, data) {
   wss.clients.forEach((client) => {
     if(client.id !== id) {
-      ws.send(JSON.stringify({
+      client.send(JSON.stringify({
         type: 'addBook',
         data: data
         // {
@@ -87,10 +87,10 @@ function addBook(id, data) {
   });
 }
 
-function removeBook(id, data) {
+function wsRemoveBook(id, data) {
   wss.clients.forEach((client) => {
     if(client.id !== id) {
-      ws.send(JSON.stringify({
+      client.send(JSON.stringify({
         type: 'removeBook',
         data: data
         // {
@@ -102,10 +102,10 @@ function removeBook(id, data) {
   });
 }
 
-function requestSubmit(id, data) {
+function wsRequestSubmit(id, data) {
   wss.clients.forEach((client) => {
     if(client.id !== id) {
-      ws.send(JSON.stringify({
+      client.send(JSON.stringify({
         type: 'requestSubmit',
         data: data
         // {
@@ -118,26 +118,10 @@ function requestSubmit(id, data) {
   });
 }
 
-function requestCancel(id, data) {
+function wsRequestAccept(id, data) {
   wss.clients.forEach((client) => {
     if(client.id !== id) {
-      ws.send(JSON.stringify({
-        type: 'requestCancel',
-        data: data
-        // {
-        //   book: '39iYWTb6n6cC',
-        //   owner: 'testUser',
-        //   requester: 'testUser2'
-        // }
-      }));
-    }
-  });
-}
-
-function requestAccept(id, data) {
-  wss.clients.forEach((client) => {
-    if(client.id !== id) {
-      ws.send(JSON.stringify({
+      client.send(JSON.stringify({
         type: 'requestAccept',
         data: data
         // {
@@ -150,10 +134,26 @@ function requestAccept(id, data) {
   });
 }
 
-function requestDone(id, data) {
+function wsRequestCancel(id, data) {
   wss.clients.forEach((client) => {
     if(client.id !== id) {
-      ws.send(JSON.stringify({
+      client.send(JSON.stringify({
+        type: 'requestCancel',
+        data: data
+        // {
+        //   book: '39iYWTb6n6cC',
+        //   owner: 'testUser',
+        //   requester: 'testUser2'
+        // }
+      }));
+    }
+  });
+}
+
+function wsRequestDone(id, data) {
+  wss.clients.forEach((client) => {
+    if(client.id !== id) {
+      client.send(JSON.stringify({
         type: 'requestDone',
         data: data
         // {
@@ -169,11 +169,11 @@ function requestDone(id, data) {
 
 module.exports = {
   webSocketInitialise: webSocketInitialise,
-  setLocation: setLocation,
-  addBook: addBook,
-  removeBook: removeBook,
-  requestSubmit: requestSubmit,
-  requestCancel: requestCancel,
-  requestAccept: requestAccept,
-  requestDone: requestDone
+  wsSetLocation: wsSetLocation,
+  wsAddBook: wsAddBook,
+  wsRemoveBook: wsRemoveBook,
+  wsRequestSubmit: wsRequestSubmit,
+  wsRequestAccept: wsRequestAccept,
+  wsRequestCancel: wsRequestCancel,
+  wsRequestDone: wsRequestDone
 }

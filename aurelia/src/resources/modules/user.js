@@ -34,11 +34,6 @@ export class User {
 
   async initialise(reset=false) {
     if(!this.state.books.length || reset) {
-      // if(this.state.toUpdate) {
-      //   clearInterval(this.state.toUpdate);
-      //   this.state.toUpdate = null;
-      // }
-
       let response = await this.api.getBookshelf();
       if(response.get) {
         this.state.books = response.bookshelf.map((v, i, a) => {

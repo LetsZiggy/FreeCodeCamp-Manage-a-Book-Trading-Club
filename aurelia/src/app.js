@@ -95,8 +95,8 @@ export class App {
   }
 
   setWebsocket() {
-    this.state.webSocket = new WebSocket(`ws://localhost:3000`);
-    // this.state.webSocket = new WebSocket(`wss://letsziggy-freecodecamp-dynamic-web-application-04.glitch.me`);
+    // this.state.webSocket = new WebSocket(`ws://localhost:3000`);
+    this.state.webSocket = new WebSocket(`wss://letsziggy-freecodecamp-dynamic-web-application-04.glitch.me`);
 
     this.state.webSocket.onopen = (event) => {
       console.log('open');

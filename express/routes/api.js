@@ -43,8 +43,8 @@ router.post('/user/location', async (req, res, next) => {
     res.json({ update: true });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ update: false });
   }
 });
@@ -131,8 +131,8 @@ router.post('/book/add', async (req, res, next) => {
     res.json({ add: true });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ add: false });
   }
 });
@@ -169,8 +169,8 @@ router.post('/book/remove', async (req, res, next) => {
     res.json({ remove: true });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ remove: false });
   }
 });
@@ -188,8 +188,8 @@ router.post('/request/submit', async (req, res, next) => {
     res.json({ update: true });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ update: false });
   }
 });
@@ -207,8 +207,8 @@ router.post('/request/accept', async (req, res, next) => {
     res.json({ update: true });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ update: false });
   }
 });
@@ -226,8 +226,8 @@ router.post('/request/cancel', async (req, res, next) => {
     res.json({ update: true });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ update: false });
   }
 });
@@ -283,8 +283,8 @@ router.post('/request/done', async (req, res, next) => {
     res.json({ update: true, location: findOne.location });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ update: false });
   }
 });
@@ -327,14 +327,14 @@ router.post('/user/create', async (req, res, next) => {
 
     let date = new Date();
     date.setDate(date.getDate() + 1);
-    res.cookie('id', id, { expires: date, path: '/', httpOnly: true });
-    // res.cookie('id', id, { expires: date, path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', id, { expires: date, path: '/', httpOnly: true });
+    res.cookie('id', id, { expires: date, path: '/', httpOnly: true, secure: true });
 
     res.json({ create: true, expire: date.getTime(), location: '' });
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ create: false });
   }
 });
@@ -359,22 +359,22 @@ router.post('/user/login', async (req, res, next) => {
       else {
         let date = new Date();
         date.setDate(date.getDate() + 1);
-        res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true });
-        // res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true, secure: true });
+        // res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true });
+        res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true, secure: true });
         res.json({ get: true, expire: date.getTime(), location: findUser.location });
       }
     }
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ get: false });
   }
 });
 
 router.post('/user/logout', async (req, res, next) => {
-  res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-  // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+  // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+  res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
   res.json({ logout: true });
 });
 
@@ -397,14 +397,14 @@ router.post('/user/edit', async (req, res, next) => {
 
       let date = new Date();
       date.setDate(date.getDate() + 1);
-      res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true });
-      // res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true, secure: true });
+      // res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true });
+      res.cookie('id', findUser.id, { expires: date, path: '/', httpOnly: true, secure: true });
       res.json({ update: true, expire: date.getTime(), location: findUser.location });
     }
   }
   else {
-    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
-    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
+    // res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true });
+    res.cookie('id', '', { expires: new Date(), path: '/', httpOnly: true, secure: true });
     res.json({ update: false });
   }
 });

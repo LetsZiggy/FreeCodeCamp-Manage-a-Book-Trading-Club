@@ -48,10 +48,6 @@ function wsSetLocation(id, data) {
       client.send(JSON.stringify({
         type: 'setLocation',
         data: data
-        // {
-        //   username: 'testUser2',
-        //   location: 'Simei MRT, Singapore'
-        // }
       }));
     }
   });
@@ -63,25 +59,6 @@ function wsAddBook(id, data) {
       client.send(JSON.stringify({
         type: 'addBook',
         data: data
-        // {
-        //   'id': 'Test-ID',
-        //   'title': 'Test Book',
-        //   'authors': ['Test Author'],
-        //   'image': 'http://via.placeholder.com/250x350',
-        //   'link': 'https://www.example.com',
-        //   'owners': [
-        //     {
-        //       'username': 'testUser2',
-        //       'location': 'Simei MRT, Singapore',
-        //       'requests': {}
-        //     },
-        //     {
-        //       'username': 'testUser3',
-        //       'location': 'Pasir Ris MRT, Singapore',
-        //       'requests': {}
-        //     }
-        //   ]
-        // }
       }));
     }
   });
@@ -93,10 +70,6 @@ function wsRemoveBook(id, data) {
       client.send(JSON.stringify({
         type: 'removeBook',
         data: data
-        // {
-        //   book: 'Test-ID',
-        //   username: 'testUser2'
-        // }
       }));
     }
   });
@@ -108,11 +81,6 @@ function wsRequestSubmit(id, data) {
       client.send(JSON.stringify({
         type: 'requestSubmit',
         data: data
-        // {
-        //   book: '39iYWTb6n6cC',
-        //   owner: 'testUser',
-        //   requester: 'testUser2'
-        // }
       }));
     }
   });
@@ -124,11 +92,6 @@ function wsRequestAccept(id, data) {
       client.send(JSON.stringify({
         type: 'requestAccept',
         data: data
-        // {
-        //   book: '9nloexmq6QsC',
-        //   owner: 'testUser2',
-        //   requester: 'testUser'
-        // }
       }));
     }
   });
@@ -140,11 +103,6 @@ function wsRequestCancel(id, data) {
       client.send(JSON.stringify({
         type: 'requestCancel',
         data: data
-        // {
-        //   book: '39iYWTb6n6cC',
-        //   owner: 'testUser',
-        //   requester: 'testUser2'
-        // }
       }));
     }
   });
@@ -156,12 +114,6 @@ function wsRequestDone(id, data) {
       client.send(JSON.stringify({
         type: 'requestDone',
         data: data
-        // {
-        //   book: '9nloexmq6QsC',
-        //   owner: 'testUser2',
-        //   requester: 'testUser',
-        //   location: 'testLocation'
-        // }
       }));
     }
   });

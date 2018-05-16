@@ -43,7 +43,7 @@ export class Login {
       });
 
       this.state.user.book = null;
-      if(this.router.history.previousLocation === '/home' && document.getElementById('book')) {
+      if(document.getElementById('book')) {
         document.getElementById('book').style.visibility = 'hidden';
         document.getElementById('book').style.pointerEvents = 'none';
       }

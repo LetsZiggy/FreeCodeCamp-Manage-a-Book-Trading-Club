@@ -17,6 +17,12 @@ export class User {
   }
 
   canActivate() {
+    if(document.getElementById('book') || this.state.user.book !== null) {
+      this.state.user.book = null;
+      document.getElementById('book').style.visibility = 'hidden';
+      document.getElementById('book').style.pointerEvents = 'none';
+    }
+
     if(this.state.user.username === null) {
         return(new Redirect('home'));
     }

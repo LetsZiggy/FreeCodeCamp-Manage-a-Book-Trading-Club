@@ -48,7 +48,7 @@ export class Login {
         document.getElementById('book').style.pointerEvents = 'none';
       }
 
-      return(new Redirect('home')); 
+      return(new Redirect('home'));
     }
   }
 
